@@ -5,7 +5,7 @@ const path = require('path');
 const handlebars = require('express-handlebars');
 const session = require('express-session');
 
-const serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://bauzarqa.firebaseapp.com',
