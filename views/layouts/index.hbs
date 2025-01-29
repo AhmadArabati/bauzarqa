@@ -1,0 +1,184 @@
+<section class="banner-container">
+    {{!-- <video autoplay muted loop>
+        <source src="/videos/desertdefense.mp4" type="video/mp4">
+    </video> --}}
+    <img src="/images/banner.png" class="banner">
+    <div class="banner-content">
+        <img src="/images/marka_shadow.png">
+        <h1>BAU Zarqa Official Website</h1>
+        <p>This website was made by <strong>&copy; <u style="text-decoration: underline !important;">Ahmad
+                    Arabati</u></strong>.</p>
+        <a href="#about-us">Explore Now</a>
+    </div>
+</section>
+
+<main>
+    <section id="our-games" class="section">
+        <h2>Our Services</h2>
+        <p><strong>Some questions you might have:</strong></p>
+        <p><em>What services do you provide?</em></p>
+        <ul>
+            <li><strong>Book Exchange:</strong> Easily sell, buy, or exchange books with other students. Simplify your
+                academic journey!</li>
+            <li><strong>Summaries:</strong> Access high-quality, well-organized summaries to save time and study more
+                effectively.</li>
+            <li><strong>Question Bank:</strong> Browse a curated bank of past and potential exam questions to help you
+                prepare with confidence.</li>
+        </ul>
+        <br>
+        <p><em>What about the prices?</em></p>
+        <ul>
+            <li>Don't worry about costs! It's 100% <strong>free</strong>. Our goal is to make learning accessible and
+                enjoyable for everyone.</li>
+        </ul>
+        <div class="cards-container">
+            <div class="card">
+                <img src="/images/b2.png">
+                <h3>Book Exchange</h3>
+                <a href="/services/book-exchange">Exchange Now <i class="fa-solid fa-book"></i></a>
+            </div>
+            <div class="card">
+                <img src="/images/questions_bank.png">
+                <h3>Questions Bank</h3>
+                <a href="/services/book-exchange">Go to bank <i class="fa-solid fa-scroll"></i></a>
+            </div>
+            <div class="card">
+                <img src="/images/summary.png">
+                <h3>Summaries</h3>
+                <a href="/services/book-exchange">Get a summary <i class="fa-solid fa-list-check"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <section id="about-us" class="section">
+        <h2>About Us</h2>
+        <p>
+            Hello, i'm Ahmad Arabati from <a
+                href="https://www.google.com/search?q=Jordan&rlz=1C1CHWL_enJO1008JO1008&oq=Jordan&gs_lcrp=EgZjaHJvbWUyDwgAEEUYORjjAhixAxiABDIKCAEQLhixAxiABDIGCAIQRRg9MgYIAxBFGD0yBggEEEUYPTIGCAUQRRhBMgYIBhBFGEEyBggHEEUYQdIBBzQ3N2owajeoAgCwAgA&sourceid=chrome&ie=UTF-8"
+                target="_blank">Jordan</a>.
+        </p>
+        <strong style="text-decoration: underline;">
+            <p>What i'm doing in my life:</p>
+        </strong>
+        <ul>
+            <li>Studying Medical Analysis.</li>
+            <li>An indivisual Web, App, 2d Games developer.</li>
+            <li>A professional football player and former player at Al-Faisaly and Al-Rusaifa clubs.</li>
+            <li>A chess player and I already won some awards for it at the city level.</li>
+            <li>I enjoy solving puzzles in general, problem solving, Rubik's Cube, etc...</li>
+        </ul>
+    </section>
+
+</main>
+
+<style>
+    .banner-container {
+        position: relative;
+        width: 100%;
+        height: 70vh;
+        overflow: hidden;
+    }
+
+    .banner-container .banner,
+    .banner-container video {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        min-width: 100%;
+        min-height: 100%;
+        z-index: -1;
+        object-fit: cover;
+        filter: blur(0.25vmax);
+    }
+
+    .banner-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        text-align: center;
+        z-index: 1;
+        width: 75%;
+    }
+
+    .banner-content img {
+        width: 30vmin;
+    }
+
+    .banner-content h1 {
+        font-size: 3vmax;
+        margin-bottom: 1vmax;
+        text-shadow: 0.5vmax 0.5vmax 0.5vmax rgba(0, 0, 0, 0.7);
+    }
+
+    .banner-content p {
+        font-size: 1.2vmax;
+        margin-bottom: 1.5vmax;
+        text-shadow: 0.5vmax 0.5vmax 0.5vmax rgba(0, 0, 0, 0.7);
+    }
+
+    .banner-content a {
+        font-size: 1vmax;
+        text-decoration: none;
+        color: white;
+        background: var(--secondary);
+        padding: 0.8vmax 1.5vmax;
+        border-radius: 0.4vmax;
+        transition: 0.3s;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .banner-content a:hover {
+        color: var(--secondary);
+        background: white;
+    }
+
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2vmax;
+        justify-content: center;
+        padding: 2vmax;
+    }
+
+    .card {
+        border-radius: 1vmax;
+        box-shadow: 0 0 0.6vmax 0.3vmax var(--font);
+        transition: transform 0.3s ease-in-out;
+        text-align: -webkit-center;
+        padding: 1vmax;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .card img {
+        border-radius: 1vmax 1vmax 0 0;
+        width: 100%;
+    }
+
+    .card h3 {
+        font-size: 1.35vmax;
+        margin: 0.25vmax 0;
+        color: var(--font);
+    }
+
+    .card a {
+        display: block;
+        width: 100%;
+        font-size: 1vmax;
+        background-color: var(--font);
+        color: white;
+        padding: 0.25vmax;
+        border-radius: 0.25vmax;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .card a:hover {
+        background-color: var(--secondary);
+    }
+</style>
