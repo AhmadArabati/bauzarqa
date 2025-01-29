@@ -4,6 +4,18 @@ const admin = require('firebase-admin');
 const path = require('path');
 const handlebars = require('express-handlebars');
 const session = require('express-session');
+const { Firestore } = require('@google-cloud/firestore');
+const { GoogleAuth } = require('google-auth-library');
+
+const auth = new GoogleAuth({
+  keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
+});
+
+const firestore = new Firestore({
+  projectId: 'bauzarqa',
+  credentials: JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS),
+});
+
 
 const serviceAccount = require('./db.json');
 admin.initializeApp({
