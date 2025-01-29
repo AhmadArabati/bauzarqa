@@ -7,7 +7,7 @@ const session = require('express-session');
 
 const serviceAccount = require(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert(JSON.parse(serviceAccount)),
     databaseURL: 'https://bauzarqa.firebaseapp.com',
     firestore: { ignoreUndefinedProperties: true },
     storageBucket: "bauzarqa.appspot.com"
