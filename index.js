@@ -6,8 +6,7 @@ const handlebars = require('express-handlebars');
 const session = require('express-session');
 const flash = require('connect-flash');
 
-// const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS); // When upload the project on https add key name it GOOGLE_APPLICATION_CREDENTIALS in env // google will disable any public key so in env will be a secret file
-const serviceAccount = require('./credentials.json');
+const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS); // When upload the project on https add key name it GOOGLE_APPLICATION_CREDENTIALS in env // google will disable any public key so in env will be a secret file
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://bauzarqa.firebaseapp.com',
