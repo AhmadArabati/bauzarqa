@@ -2,7 +2,8 @@
     {{!-- <video autoplay muted loop>
         <source src="/videos/desertdefense.mp4" type="video/mp4">
     </video> --}}
-    <img src="/images/banner.png" class="banner">
+    <img src="/images/banner1.png" class="banner active">
+    <img src="/images/banner2.png" class="banner">
     <div class="banner-content">
         <img src="/images/marka_shadow.png">
         <h1>BAU Zarqa Official Website</h1>
@@ -18,7 +19,8 @@
         <p><strong>Some questions you might have:</strong></p>
         <p><em>What services do you provide?</em></p>
         <ul>
-            <li><strong>Book Exchange:</strong> Easily sell, buy, or exchange books with other students. Simplify your
+            <li><strong>Book Exchange:</strong> Easily sell, buy, give or exchange books with other students. Simplify
+                your
                 academic journey!</li>
             <li><strong>Summaries:</strong> Access high-quality, well-organized summaries to save time and study more
                 effectively.</li>
@@ -30,6 +32,7 @@
         <ul>
             <li>Don't worry about costs! It's 100% <strong>free</strong>. Our goal is to make learning accessible and
                 enjoyable for everyone.</li>
+            <li>All what you need is to sign in and get verified by us.</li>
         </ul>
         <div class="cards-container">
             <div class="card">
@@ -40,29 +43,35 @@
             <div class="card">
                 <img src="/images/questions_bank.png">
                 <h3>Questions Bank</h3>
-                <a href="/services/book-exchange">Go to bank <i class="fa-solid fa-scroll"></i></a>
+                <a onclick="alert('Soon!')">Go to bank <i class="fa-solid fa-scroll"></i></a>
             </div>
             <div class="card">
                 <img src="/images/summary.png">
                 <h3>Summaries</h3>
-                <a href="/services/book-exchange">Get a summary <i class="fa-solid fa-list-check"></i></a>
+                <a onclick="alert('Soon!')">Get a summary <i class="fa-solid fa-list-check"></i></a>
             </div>
         </div>
+    </section>
+
+    <section id="our-location" class="section">
+        <h2>Our Location</h2>
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3381.6007798838937!2d36.0926648!3d32.0529957!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151b6fd280a9c80d%3A0x490bdd2869686758!2z2KzYp9mF2LnYqSDYp9mE2KjZhNmC2KfYoSDYp9mE2KrYt9io2YrZgtmK2Kkv2YPZhNmK2Kkg2KfZhNiy2LHZgtin2KEg2KfZhNis2KfZhdi52YrYqQ!5e0!3m2!1sen!2sjo!4v1738184563574!5m2!1sen!2sjo"
+            height="450" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </section>
 
     <section id="about-us" class="section">
         <h2>About Us</h2>
         <p>
-            Hello, i'm Ahmad Arabati from <a
-                href="https://www.google.com/search?q=Jordan&rlz=1C1CHWL_enJO1008JO1008&oq=Jordan&gs_lcrp=EgZjaHJvbWUyDwgAEEUYORjjAhixAxiABDIKCAEQLhixAxiABDIGCAIQRRg9MgYIAxBFGD0yBggEEEUYPTIGCAUQRRhBMgYIBhBFGEEyBggHEEUYQdIBBzQ3N2owajeoAgCwAgA&sourceid=chrome&ie=UTF-8"
-                target="_blank">Jordan</a>.
+            Hello, i'm Ahmad Arabati, a student at Al-Balqa Applied University - Zarqa College.
         </p>
         <strong style="text-decoration: underline;">
             <p>What i'm doing in my life:</p>
         </strong>
         <ul>
             <li>Studying Medical Analysis.</li>
-            <li>An indivisual Web, App, 2d Games developer.</li>
+            <li>An indivisual Web, App, Games developer.</li>
+            <li>Photographic designer & video editor.</li>
             <li>A professional football player and former player at Al-Faisaly and Al-Rusaifa clubs.</li>
             <li>A chess player and I already won some awards for it at the city level.</li>
             <li>I enjoy solving puzzles in general, problem solving, Rubik's Cube, etc...</li>
@@ -79,17 +88,21 @@
         overflow: hidden;
     }
 
-    .banner-container .banner,
-    .banner-container video {
+    .banner {
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         min-width: 100%;
         min-height: 100%;
-        z-index: -1;
         object-fit: cover;
         filter: blur(0.25vmax);
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+    }
+
+    .banner.active {
+        opacity: 1;
     }
 
     .banner-content {
@@ -181,4 +194,26 @@
     .card a:hover {
         background-color: var(--secondary);
     }
+
+    iframe {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        border: 0.2rem solid var(--font) !important;
+        overflow: hidden;
+    }
 </style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const banners = document.querySelectorAll(".banner");
+        let index = 0;
+
+        setInterval(() => {
+            banners[index].classList.remove("active");
+            index = (index + 1) % banners.length;
+            banners[index].classList.add("active");
+        }, 3000);
+    });
+</script>

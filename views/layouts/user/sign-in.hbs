@@ -1,17 +1,24 @@
 <main>
+    {{#if error}}
+    <div class="alert alert-warning" role="alert">
+        {{error}}
+        {{#if add}}
+        <br>
+        <a href="/user/sign-up">register from here</a>
+        {{/if}}
+    </div>
+    <br>
+    {{/if}}
+
     <section class="section">
         <h2>Verified Student</h2>
         <form action="/db/user/sign-in" method="POST">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" placeholder="Example: Ahmad Arabati" required>
-            <br>
-
             <label for="uni-id">Uni ID:</label>
-            <input type="text" id="uni-id" name="uniId" placeholder="Example: 32217030050" required>
+            <input type="text" id="uni-id" name="uniId" placeholder="Example: 32217030050" maxlength="11" required>
             <br>
 
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Example: ahmad@1234" required>
+            <input type="password" id="password" name="password" placeholder="Example: ahmad@1234" maxlength="20" required>
             <br>
 
             <button type="submit">Sign In</button>
@@ -110,7 +117,7 @@
         }
     }
 
-    section a {
+    main a {
         color: var(--secondary);
         display: block;
         text-align: -webkit-center;

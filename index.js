@@ -4,8 +4,10 @@ const admin = require('firebase-admin');
 const path = require('path');
 const handlebars = require('express-handlebars');
 const session = require('express-session');
+const flash = require('connect-flash');
 
-const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+// const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS); // When upload the project on https add key name it GOOGLE_APPLICATION_CREDENTIALS in env // google will disable any public key so in env will be a secret file
+const serviceAccount = require('./credentials.json');
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://bauzarqa.firebaseapp.com',
@@ -32,6 +34,9 @@ const hbs = handlebars.create({
     extname: 'hbs',
     helpers: {
         eq: (a, b) => a === b,
+        json: function (context) {
+            return JSON.stringify(context);
+        }
     },
     layoutsDir: path.join(__dirname, 'views/layouts'),
     partialsDir: path.join(__dirname, 'views/partials'),
@@ -55,6 +60,8 @@ app.use(
         cookie: { secure: false },
     })
 );
+
+app.use(flash());
 
 app.use('/', indexRoute);
 app.use('/db', dbRoute);

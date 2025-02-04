@@ -31,11 +31,15 @@ router.get('/services/book-exchange', loggedIn, (req, res) => {
 });
 
 router.get('/user/sign-up', loggedOut, (req, res) => {
-    res.render('user/sign-up', { title: '- Sign Up' });
+    const error = req.flash('error');
+    const add = req.flash('add');
+    res.render('user/sign-up', { title: '- Sign Up', error, add });
 });
 
 router.get('/user/sign-in', loggedOut, (req, res) => {
-    res.render('user/sign-in', { title: '- Sign In' });
+    const error = req.flash('error');
+    const add = req.flash('add');
+    res.render('user/sign-in', { title: '- Sign In', error, add  });
 });
 
 router.get('/user/sign-out', loggedIn, (req, res) => {
