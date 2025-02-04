@@ -53,10 +53,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
     session({
-        secret: 'your-secret-key',
+        secret: process.env.SESSION_SECRET,
         resave: false,
-        saveUninitialized: true,
-        cookie: { secure: false },
+        saveUninitialized: false,
+        cookie: { secure: true, httpOnly: true, sameSite: 'strict', maxAge: 1000 * 60 * 30 },
     })
 );
 
