@@ -61,11 +61,6 @@ router.get('/services/book-exchange', loggedIn, (req, res) => {
     res.render('services/book-exchange', { title: '- Book Exchange', user });
 });
 
-router.get('/services/questions-bank', loggedIn, (req, res) => {
-    const user = req.session.user;
-    res.render('services/questions-bank', { title: '- Questions Bank', user });
-});
-
 router.get('/services/grades-calculator', loggedIn, (req, res) => {
     const user = req.session.user;
     res.render('services/grades-calculator', { title: '- Grades Calculator', user });
