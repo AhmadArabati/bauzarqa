@@ -26,6 +26,27 @@ const groups = [
         image: 'الطفيليات الطبية الفصل الثاني'
     },
     {
+        name: 'كل اشى مهم والقرارات الرسمية بخصوص الجامعه',
+        link: 'https://chat.whatsapp.com/Cek6ymRYKZHCd0744WU3fY'
+    },
+    {
+        name: 'استفسارات تخصص التمريض🩺🏥💉',
+        link: 'https://chat.whatsapp.com/FnpELMC8zJy2X3oNN69MXV'
+    },
+    {
+        name: 'فتح شعبة انسجة ح ث 10.30-11.30/لاب ح11.30-2.30',
+        link: 'https://chat.whatsapp.com/GSZbOSNwe2p3u9qY2dM645'
+    },
+    {
+        name: 'فتح شعبة سريرية ن ر 8.30-11',
+        link: 'https://chat.whatsapp.com/I5hmy8U8MYcDlUUo2LVnhN'
+    },
+    {
+        name: 'بيولوجيا جزيئية// الفصل الثاني// بدون دكتور',
+        link: 'https://chat.whatsapp.com/F7KWlHNQyr3FSM8qpi0UUV',
+        image: 'بيولوجيا جزيئية الفصل الثاني بدون دكتور'
+    },
+    {
         name: 'دم (2)',
         link: 'https://chat.whatsapp.com/Kb9Oo6XzAbLJcBUXInrlNY'
     },
