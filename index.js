@@ -5,8 +5,12 @@ const path = require('path');
 const handlebars = require('express-handlebars');
 const session = require('express-session');
 const flash = require('connect-flash');
+const https = require('http'); // https
+const fs = require('fs');
+const WebSocket = require("ws");
 
-const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS); // When upload the project on https add key name it GOOGLE_APPLICATION_CREDENTIALS in env // google will disable any public key so in env will be a secret file
+// const serviceAccount = require('./credentials.json');
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://bauzarqa.firebaseapp.com',
@@ -20,6 +24,66 @@ const indexRoute = require('./routes/index');
 const dbRoute = require('./routes/db');
 
 const app = express();
+
+const options = {
+    key: fs.readFileSync('key.pem'),
+    cert: fs.readFileSync('cert.pem')
+};
+
+const server = https.createServer(options, app);
+const wss = new WebSocket.Server({ server });
+// const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on("connection", (ws) => {
+    console.log("Client connected");
+
+    ws.on("message", async (content) => {
+        try {
+            const data = JSON.parse(content);
+            const { user, name, message, chatId } = data;
+
+            if (!user || !user.name || !user.uniId) {
+                return ws.send(JSON.stringify({ error: "Invalid user data" }));
+            }
+
+            const userQuery = await db.collection("users")
+                .where("name", "==", user.name)
+                .where("uniId", "==", user.uniId)
+                .limit(1)
+                .get();
+
+            if (userQuery.empty) {
+                return ws.send(JSON.stringify({ error: "Unauthorized user" }));
+            }
+
+            if (!name || (name !== user.name && name !== "Anonymous") || !message || !chatId) {
+                return ws.send(JSON.stringify({ error: "Invalid message data" }));
+            }
+
+            const chatRef = db.collection("chats").doc(chatId).collection("messages").doc();
+
+            // Store message
+            await chatRef.set({
+                name,
+                message,
+                createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            });
+
+            // Broadcast message to all clients
+            wss.clients.forEach((client) => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify({ chatId, name, message }));
+                }
+            });
+
+        } catch (error) {
+            console.error("Error handling message:", error);
+            ws.send(JSON.stringify({ error: "Server error occurred" }));
+        }
+    });
+
+    ws.on("close", () => console.log("Client disconnected"));
+});
 
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
@@ -53,10 +117,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
     session({
-        secret: process.env.SESSION_SECRET,
+        secret: process.env.SESSION_SECRET, // if https process.env.SESSION_SECRET
         resave: false,
-        saveUninitialized: false,
-        cookie: { secure: false, httpOnly: true, sameSite: 'strict', maxAge: 1000 * 60 * 30 },
+        saveUninitialized: false, // false
+        cookie: { secure: true, httpOnly: true, sameSite: 'strict', maxAge: 1000 * 60 * 30 }, // true if https cookie: { secure: true, httpOnly: true, sameSite: 'strict', maxAge: 1000 * 60 * 30 }
     })
 );
 
@@ -65,4 +129,4 @@ app.use(flash());
 app.use('/', indexRoute);
 app.use('/db', dbRoute);
 
-app.listen(3000, () => console.log('HTTPS Server running on port 3000'));
+server.listen(3000, () => console.log('HTTPS Server running on port 3000'));

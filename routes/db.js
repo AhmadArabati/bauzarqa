@@ -4,6 +4,23 @@ const bcrypt = require('bcryptjs');
 const admin = require('firebase-admin');
 const cloudinary = require('cloudinary').v2;
 
+async function hashPassword() {
+    const password = '';
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log(hashedPassword);
+}
+
+// hashPassword();
+
+async function name() {
+    const booksSnapshot = await db.collection("users").orderBy("createdAt", "desc").get();
+    const books = booksSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+    console.log(books);
+}
+
+// name();
+
 cloudinary.config({
     cloud_name: 'dguwmbpb1',
     api_key: '414471397375342',
@@ -51,12 +68,21 @@ router.post('/user/sign-up', loggedOut, upload.single('uniCard'), async (req, re
     const hashedPassword = await bcrypt.hash(password, 10);
 
     try {
-        const userQuery = await db.collection('users')
+        const nameQuery = await db.collection('users')
+            .where('name', '==', name)
+            .limit(1)
+            .get();
+
+        if (!nameQuery.empty) {
+            return throwError(req, res, `Name ${name} already exists`, '/user/sign-up/#error', true);
+        }
+
+        const uniIdQuery = await db.collection('users')
             .where('uniId', '==', uniId)
             .limit(1)
             .get();
 
-        if (!userQuery.empty) {
+        if (!uniIdQuery.empty) {
             return throwError(req, res, `User ${uniId} already exists`, '/user/sign-up/#error', true);
         }
 
@@ -209,6 +235,131 @@ router.post("/done-book", loggedIn, async (req, res) => {
     } catch (error) {
         console.error("Error updating book status:", error);
         return throwError(req, res, `Something went wrong!`, '/services/book-exchange/#error');
+    }
+});
+
+router.post("/add-bank", loggedIn, async (req, res) => {
+    const { degree, section, name, number, link } = req.body;
+
+    if (!degree || !section || !name || !number || !link) {
+        return throwError(req, res, `Missing required fields!`, '/services/questions-bank');
+    }
+
+    try {
+        const bankRef = db.collection("bank").doc(degree).collection(section).doc();
+        await bankRef.set({
+            id: bankRef.id,
+            name,
+            number,
+            link,
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+
+        return throwError(req, res, `Bank added successfully!`, '/services/questions-bank');
+    } catch (error) {
+        console.error("Error adding bank record:", error);
+        return throwError(req, res, `Something went wrong!`, '/services/questions-bank');
+    }
+});
+
+router.get("/get-bank/:degree/:section", loggedIn, async (req, res) => {
+    const { degree, section } = req.params;
+
+    try {
+        const bankSnapshot = await db.collection("bank").doc(degree).collection(section).orderBy("createdAt", "desc").get();
+        const bank = bankSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+        res.status(200).json(bank);
+    } catch (error) {
+        console.error("Error fetching banks:", error);
+        return throwError(req, res, `Error fetching bank records!`, '/services/questions-bank');
+    }
+});
+
+router.post("/add-question", loggedIn, async (req, res) => {
+    const user = req.session.user;
+    try {
+        const { name, title, description } = req.body;
+
+        if (!name || (name !== user.name && name !== 'Anonymous') || !title || title.length > 20 || !description || description.length > 60) {
+            return throwError(req, res, `Something went wrong!`, '/services/ask-and-answer/#error');
+        }
+
+        const newQuestionRef = db.collection("questions").doc();
+
+        await newQuestionRef.set({
+            id: newQuestionRef.id,
+            uid: user.uniId,
+            name,
+            title,
+            description,
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+            done: false
+        });
+
+        return throwError(req, res, `Question added successfully!`, '/services/ask-and-answer/#error');
+    } catch (error) {
+        console.error("Error adding question:", error);
+        return throwError(req, res, `Something went wrong!`, '/services/ask-and-answer/#error');
+    }
+});
+
+router.get("/get-questions", loggedIn, async (req, res) => {
+    try {
+        const questionsSnapshot = await db.collection("questions").orderBy("createdAt", "desc").get();
+        const questions = questionsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+        res.status(200).json(questions);
+    } catch (error) {
+        console.error("Error fetching questions:", error);
+        return throwError(req, res, `Error getting questions!`, '/services/ask-and-answer/#error');
+    }
+});
+
+router.post("/done-question", loggedIn, async (req, res) => {
+    const { uniId, uid, id } = req.body;
+
+    try {
+        if (uniId !== uid) {
+            return throwError(req, res, `Something went wrong!`, '/services/ask-and-answer/#error');
+        }
+
+        const questionRef = db.collection("questions").doc(id);
+        const questionSnapshot = await questionRef.get();
+
+        if (!questionSnapshot.exists) {
+            return throwError(req, res, `Something went wrong!`, '/services/ask-and-answer/#error');
+        }
+
+        await questionRef.update({ done: true });
+
+        return throwError(req, res, `Question marked as done!`, '/services/ask-and-answer/#error');
+    } catch (error) {
+        console.error("Error updating question status:", error);
+        return throwError(req, res, `Something went wrong!`, '/services/ask-and-answer/#error');
+    }
+});
+
+// const wss = new WebSocket.Server({ port: 8080 });
+
+router.get("/get-chat", loggedIn, async (req, res) => {
+    const { chatId } = req.query;
+
+    if (!chatId) return res.status(400).json({ error: "chatId is required" });
+
+    try {
+        const messagesRef = db.collection("chats").doc(chatId).collection("messages");
+        const snapshot = await messagesRef.orderBy("createdAt", "asc").get();
+
+        let messages = [];
+        snapshot.forEach((doc) => {
+            messages.push(doc.data());
+        });
+
+        return res.json({ messages });
+    } catch (error) {
+        console.error("Error fetching chat:", error);
+        return res.status(500).json({ error: "Failed to fetch chat messages" });
     }
 });
 

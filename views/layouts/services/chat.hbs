@@ -1,0 +1,184 @@
+<main>
+    <section class="section chat-details">
+        <h2>Chat By {{ chat.owner }}</h2>
+        <h3>{{ chat.title }}</h3>
+        <h4>{{ chat.description }}</h4>
+        <br>
+        <hr>
+    </section>
+
+    <section class="section answers">
+        <h2>Answers & Discussion</h2>
+        <div class="chat-container">
+            <div class="messages" id="messages"></div>
+            <div class="input-container">
+                <select id="nameOption">
+                    <option value="{{user.name}}">{{user.name}}</option>
+                    <option value="Anonymous">Anonymous</option>
+                </select>
+                <input type="text" id="messageInput" placeholder="Type a message">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </section>
+</main>
+
+<style>
+    .chat-details h3 {
+        text-align: center;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .chat-details h4 {
+        text-align: center;
+        margin-bottom: 1rem;
+        font-size: 1rem;
+    }
+
+    .messages {
+        width: 100%;
+        min-height: 10vh;
+        background-color: rgba(6, 136, 77, 0.2);
+        margin-bottom: 2vh;
+        padding: 2%;
+        border-radius: 0.25vmax;
+    }
+
+    .message {
+        direction: rtl;
+        text-align: right !important;
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 2%;
+        border-radius: 0.25vmax;
+        margin-bottom: 1vh;
+    }
+
+    .message span {
+        font-size: 1vmax;
+    }
+
+    .sender-name {
+        color: var(--secondary);
+        font-weight: bold;
+    }
+
+    .input-container {
+        position: sticky;
+        bottom: 1vh;
+        width: 100%;
+        display: flex;
+        gap: 2%;
+        direction: rtl;
+    }
+
+    .input-container select,
+    .input-container input {
+        padding: 0.7vmax;
+        border: 0.1vmax var(--secondary) solid;
+        border-radius: 0.25vmax;
+        font-size: 0.8vmax;
+        text-align: center;
+        direction: ltr;
+    }
+
+    .input-container select {
+        width: 20%;
+    }
+
+    .input-container input {
+        width: 70%;
+    }
+
+    .input-container button {
+        width: 10%;
+        font-size: 1vmax;
+        padding: 0.25vmax;
+        border: none;
+        border-radius: 0.25vmax;
+        background-color: var(--secondary);
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .input-container button:hover {
+        opacity: 0.8;
+    }
+
+    .input-container button:active {
+        scale: 0.95;
+    }
+
+    @media (max-width: 1366px) {
+
+        .input-container select,
+        .input-container input {
+            font-size: 0.8rem;
+        }
+
+        .input-container button {
+            font-size: 0.8rem;
+        }
+
+        .message span {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
+<script>
+    const user = {{{ json user }}};
+    const chatId = '{{ chat.id }}';
+    const ws = new WebSocket("wss://bauzarqa.onrender.com"); // ws://localhost:8080 wss://bauzarqa.onrender.com wss://bauzarqatest.onrender.com
+    const messagesDiv = document.getElementById("messages");
+
+    ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+        messagesDiv.innerHTML += `
+        <p class="message">
+            <span class="sender-name">[${data.name}]</span>
+            &nbsp;&nbsp;&nbsp;
+            <span class="sender-message">${data.message}</span>
+        </p>`;
+    };
+
+    function sendMessage() {
+        const name = document.getElementById("nameOption").value;
+        const message = document.getElementById("messageInput").value.trim();
+        if (!message) return alert("Message cannot be empty!");
+
+        ws.send(JSON.stringify({ user, name, message, chatId }));
+        document.getElementById("messageInput").value = "";
+    }
+
+    async function fetchChat() {
+        try {
+            const response = await fetch(`/db/get-chat?chatId=${chatId}`);
+            const chat = await response.json();
+
+            if (!chat.messages || !Array.isArray(chat.messages)) return;
+
+            // Sort messages by created timestamp (oldest to newest)
+            chat.messages.sort((a, b) => a.createdAt - b.createdAt);
+
+            messagesDiv.innerHTML = ""; // Clear messages before appending
+            chat.messages.forEach((msg) => {
+                messagesDiv.innerHTML += `
+            <p class="message">
+                <span class="sender-name">[${msg.name}]</span>
+                &nbsp;&nbsp;&nbsp;
+                <span class="sender-message">${msg.message}</span>
+            </p>`;
+            });
+        } catch (error) {
+            console.error("Error fetching chat:", error);
+        }
+    }
+
+    fetchChat();
+</script>

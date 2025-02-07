@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const admin = require('firebase-admin');
+
+const db = admin.firestore();
 
 const loggedOut = (req, res, next) => {
     if (req.session.user) {
@@ -15,6 +18,16 @@ const loggedIn = (req, res, next) => {
     next();
 };
 
+function throwError(req, res, msg, url, add) {
+    req.flash('error', msg);
+
+    if (add) {
+        req.flash('add', true);
+    }
+
+    res.redirect(url);
+}
+
 router.get('/', (req, res) => {
     const user = req.session.user;
     res.render('index', { title: '- Home page', user });
@@ -23,11 +36,6 @@ router.get('/', (req, res) => {
 router.get('/privacy-policy', (req, res) => {
     const user = req.session.user;
     res.render('privacy-policy', { title: '- Privacy Policy', user });
-});
-
-router.get('/services/book-exchange', loggedIn, (req, res) => {
-    const user = req.session.user;
-    res.render('services/book-exchange', { title: '- Book Exchange', user });
 });
 
 router.get('/user/sign-up', loggedOut, (req, res) => {
@@ -39,7 +47,7 @@ router.get('/user/sign-up', loggedOut, (req, res) => {
 router.get('/user/sign-in', loggedOut, (req, res) => {
     const error = req.flash('error');
     const add = req.flash('add');
-    res.render('user/sign-in', { title: '- Sign In', error, add  });
+    res.render('user/sign-in', { title: '- Sign In', error, add });
 });
 
 router.get('/user/sign-out', loggedIn, (req, res) => {
@@ -48,77 +56,43 @@ router.get('/user/sign-out', loggedIn, (req, res) => {
     });
 });
 
+router.get('/services/book-exchange', loggedIn, (req, res) => {
+    const user = req.session.user;
+    res.render('services/book-exchange', { title: '- Book Exchange', user });
+});
 
+router.get('/services/questions-bank', loggedIn, (req, res) => {
+    const user = req.session.user;
+    res.render('services/questions-bank', { title: '- Questions Bank', user });
+});
 
+router.get('/services/grades-calculator', loggedIn, (req, res) => {
+    const user = req.session.user;
+    res.render('services/grades-calculator', { title: '- Grades Calculator', user });
+});
 
+router.get('/services/ask-and-answer', loggedIn, (req, res) => {
+    const user = req.session.user;
+    res.render('services/ask-and-answer', { title: '- Ask & Answer', user });
+});
 
+router.get("/services/ask-and-answer/:questionId", loggedIn, async (req, res) => {
+    const user = req.session.user;
+    const { questionId } = req.params;
 
+    try {
+        const questionDoc = await db.collection("questions").doc(questionId).get();
 
-
-
-
-
-router.get('/urlset.xml', (req, res) => {
-    res.header('Content-Type', 'application/xml');
-    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-        <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-            <!-- Homepage -->
-            <url>
-                <loc>https://arabati.onrender.com/</loc>
-                <lastmod>${new Date().toISOString()}</lastmod>
-                <changefreq>daily</changefreq>
-                <priority>1.0</priority>
-            </url>
-
-            <!-- Our Games -->
-            <url>
-                <loc>https://arabati.onrender.com/#our-games</loc>
-                <lastmod>${new Date().toISOString()}</lastmod>
-                <changefreq>weekly</changefreq>
-                <priority>0.8</priority>
-            </url>
-
-            <!-- About Us -->
-            <url>
-                <loc>https://arabati.onrender.com/#about-us</loc>
-                <lastmod>${new Date().toISOString()}</lastmod>
-                <changefreq>yearly</changefreq>
-                <priority>0.6</priority>
-            </url>
-
-            <!-- Contact Us -->
-            <url>
-                <loc>https://arabati.onrender.com/#contact-us</loc>
-                <lastmod>${new Date().toISOString()}</lastmod>
-                <changefreq>yearly</changefreq>
-                <priority>0.6</priority>
-            </url>
-
-            <!-- Privacy Policy -->
-            <url>
-                <loc>https://arabati.onrender.com/privacy-policy</loc>
-                <lastmod>${new Date().toISOString()}</lastmod>
-                <changefreq>yearly</changefreq>
-                <priority>0.5</priority>
-            </url>
-
-            <!-- Desert Defense Privacy Policy -->
-            <url>
-                <loc>https://arabati.onrender.com/games/desertdefense/privacy-policy</loc>
-                <lastmod>${new Date().toISOString()}</lastmod>
-                <changefreq>yearly</changefreq>
-                <priority>0.5</priority>
-            </url>
-
-            <!-- Red Hood Privacy Policy -->
-            <url>
-                <loc>https://arabati.onrender.com/games/redhood/privacy-policy</loc>
-                <lastmod>${new Date().toISOString()}</lastmod>
-                <changefreq>yearly</changefreq>
-                <priority>0.5</priority>
-            </url>
-        </urlset>`;
-    res.send(sitemap.trim());
+        if (!questionDoc.exists) {
+            return throwError(req, res, `Something went wrong!`, '/services/ask-and-answer/#error');
+        }
+    
+        const data = questionDoc.data();
+        res.render('services/chat', { title: '- Chat By ' + data.name, user, chat: { id: questionId, owner: data.name, title: data.title, description: data.description } });
+    } catch (error) {
+        console.error("Error fetching questions:", error);
+        return throwError(req, res, `Something went wrong!`, '/services/ask-and-answer/#error');
+    }
 });
 
 module.exports = router;

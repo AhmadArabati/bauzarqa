@@ -1,0 +1,256 @@
+<main>
+    <section class="section books">
+        <h2>Questions Bank</h2>
+        <br>
+        <div class="search">
+            <select id="degree">
+                <option value="bachelor">بكالوريوس</option>
+                <option value="diploma">دبلوم</option>
+            </select>
+            <select id="section">
+                <option value="1">العلوم الأساسية والتطبيقية</option>
+                <option value="2">العلوم الادارية والمالية والحاسوب</option>
+                <option value="3">العلوم الطبية / شعبة التغذية</option>
+                <option value="4">العلوم الطبية المساندة</option>
+            </select>
+        </div>
+        <br>
+
+        <input type="text" id="searchInput" oninput="filterResults()" placeholder="بحث عن اسم أو رقم المادة">
+        <br>
+        <hr>
+    </section>
+
+    <section class="section">
+        <div class="cards-container"></div>
+    </section>
+</main>
+
+<style>
+    .search {
+        width: 100%;
+        display: flex;
+        gap: 2%;
+        direction: rtl;
+    }
+
+    .search select {
+        padding: 0.7vmax;
+        width: 50%;
+        border: 0.1vmax var(--secondary) solid;
+        border-radius: 0.25vmax;
+        font-size: 0.8vmax;
+    }
+
+    .search button {
+        width: 15%;
+        font-size: 1vmax;
+        padding: 0.25vmax;
+        border: none;
+        border-radius: 0.25vmax;
+        background-color: var(--secondary);
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .search button:hover {
+        opacity: 0.8;
+    }
+
+    .search button:active {
+        scale: 0.95;
+    }
+
+    #searchInput {
+        width: 100%;
+        font-size: 1vmax;
+        padding: 0.25vmax;
+        border: none;
+        outline: none;
+        border-radius: 0.25vmax;
+        color: var(--secondary);
+        direction: rtl;
+    }
+
+    @media (max-width: 1366px) {
+        .search select {
+            font-size: 0.8rem;
+        }
+
+        .search button {
+            font-size: 1rem;
+        }
+    }
+
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2vmax;
+        justify-content: center;
+        padding: 2vmax;
+        direction: rtl;
+    }
+
+    .card {
+        border-radius: 1vmax;
+        box-shadow: 0 0 0.6vmax 0.3vmax var(--font);
+        transition: transform 0.3s ease-in-out;
+        text-align: -webkit-center;
+        padding: 1vmax;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .card img {
+        border-radius: 1vmax 1vmax 0 0;
+        width: 100%;
+    }
+
+    .card h1,
+    .card h2,
+    .card h3 {
+        margin: 0.25vmax 0;
+    }
+
+    .card h1 {
+        font-size: 1.5vmax;
+    }
+
+    .card h2 {
+        font-size: 1.15vmax;
+        color: var(--font);
+        text-transform: none;
+
+    }
+
+    .options {
+        display: flex;
+        gap: 2%;
+        direction: ltr;
+    }
+
+    .card a {
+        display: block;
+        width: 100%;
+        font-size: 1vmax;
+        background-color: var(--font);
+        color: white;
+        padding: 0.25vmax;
+        border-radius: 0.25vmax;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    @media (max-width: 1366px) {
+        .card h1 {
+            font-size: 1.1rem;
+        }
+
+        .card h2 {
+            font-size: 0.9rem;
+
+        }
+
+        .card a {
+            font-size: 0.7rem;
+        }
+    }
+
+    .card a:hover {
+        background-color: var(--secondary);
+    }
+</style>
+
+<script src="/js/bank.js"></script>
+<script>
+    const user = {{{ json user }}};
+
+    document.getElementById("degree").addEventListener("change", () => {
+        const section = document.getElementById("section");
+        const degree = event.target.value;
+
+        section.innerHTML = "";
+
+        const bachelorOptions = [
+            { value: "1", text: "العلوم الأساسية والتطبيقية" },
+            { value: "2", text: "العلوم الادارية والمالية والحاسوب" },
+            { value: "3", text: "العلوم الطبية / شعبة التغذية" },
+            { value: "4", text: "العلوم الطبية المساندة" },
+        ];
+
+        const diplomaOptions = [
+            { value: "1", text: "العلوم الأساسية والتطبيقية" },
+            { value: "2", text: "العلوم الادارية والمالية والحاسوب" },
+            { value: "4", text: "العلوم الطبية المساندة" },
+        ];
+
+        const options = degree === "bachelor" ? bachelorOptions : diplomaOptions;
+
+        options.forEach((opt) => {
+            const option = document.createElement("option");
+            option.value = opt.value;
+            option.textContent = opt.text;
+            section.appendChild(option);
+        });
+
+        fetchBank();
+    });
+
+    document.getElementById("section").addEventListener("change", fetchBank);
+
+    const bankCards = document.querySelector('.cards-container');
+
+    let currentBankResults = [];
+
+    function fetchBank() {
+        const degree = document.getElementById("degree").value;
+        const section = document.getElementById("section").value;
+        const bankCards = document.querySelector('.cards-container');
+
+        bankCards.innerHTML = '';
+
+        currentBankResults = bank[degree][section] || [];
+
+        if (currentBankResults.length === 0) {
+            bankCards.innerHTML = '<p>No bank records found.</p>';
+            return;
+        }
+
+        displayResults(currentBankResults);
+    }
+
+    fetchBank();
+
+    function displayResults(results) {
+        const bankCards = document.querySelector('.cards-container');
+        bankCards.innerHTML = '';
+
+        results.forEach((subject) => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
+            <h1>${subject.name}</h1>
+            <h2>${subject.number}</h2>
+            <div class="options">
+                <a href="${subject.link}" target="_blank"><i class="fa-solid fa-link"></i> Open</a>
+            </div>
+        `;
+            bankCards.appendChild(card);
+        });
+    }
+
+    function filterResults() {
+        const searchQuery = document.getElementById("searchInput").value.trim();
+        const filteredResults = currentBankResults.filter(subject =>
+            subject.name.includes(searchQuery) || subject.number.toString().includes(searchQuery)
+        );
+
+        displayResults(filteredResults);
+    }
+</script>
