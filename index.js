@@ -42,7 +42,7 @@ wss.on("connection", (ws) => {
             const data = JSON.parse(content);
             const { user, name, message, chatId } = data;
 
-            if (!user || !user.name || !user.uniId) {
+            if (!user || !name || (name !== user.name && name !== 'Anonymous') || !user.name || !user.uniId) {
                 return ws.send(JSON.stringify({ error: "Invalid user data" }));
             }
 
