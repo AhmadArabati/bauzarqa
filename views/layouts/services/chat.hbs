@@ -130,7 +130,7 @@
 <script>
     const user = {{{ json user }}};
     const chatId = '{{ chat.id }}';
-    const ws = new WebSocket("wss://bauzarqa.onrender.com"); // ws://localhost:8080 wss://bauzarqa.onrender.com wss://bauzarqatest.onrender.com
+    const ws = new WebSocket("ws://localhost:8080"); // ws://localhost:8080 wss://bauzarqa.onrender.com wss://bauzarqatest.onrender.com
     const messagesDiv = document.getElementById("messages");
 
     ws.onmessage = (event) => {

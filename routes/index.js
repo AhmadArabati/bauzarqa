@@ -61,6 +61,11 @@ router.get('/services/book-exchange', loggedIn, (req, res) => {
     res.render('services/book-exchange', { title: '- Book Exchange', user });
 });
 
+// router.get('/services/questions-bank', loggedIn, (req, res) => {
+//     const user = req.session.user;
+//     res.render('services/questions-bank', { title: '- Questions Bank', user });
+// });
+
 router.get('/services/grades-calculator', loggedIn, (req, res) => {
     const user = req.session.user;
     res.render('services/grades-calculator', { title: '- Grades Calculator', user });
@@ -88,6 +93,11 @@ router.get("/services/ask-and-answer/:questionId", loggedIn, async (req, res) =>
         console.error("Error fetching questions:", error);
         return throwError(req, res, `Something went wrong!`, '/services/ask-and-answer/#error');
     }
+});
+
+router.get('/services/whatsapp-groups', loggedIn, (req, res) => {
+    const user = req.session.user;
+    res.render('services/whatsapp-groups', { title: '- Whatsapp Gropus', user });
 });
 
 module.exports = router;
