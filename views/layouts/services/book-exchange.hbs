@@ -1,0 +1,329 @@
+<main>
+    <section class="section exchange">
+        <h2>What do you offer?</h2>
+        <br>
+        <form id="bookForm">
+            <label>
+                <strong>Type</strong>
+                <select name="bookType" id="bookType" required>
+                    <option value="Free">Free</option>
+                    <option value="Paid">Paid</option>
+                </select>
+            </label>
+
+            <label id="priceContainer" style="display: none;">
+                <strong>Price (JD)</strong>
+                <input type="number" id="bookPrice" name="bookPrice" placeholder="Example: 0.99" step="0.01" min="0.01"
+                    max="100">
+            </label>
+
+            <label>
+                <strong>Title</strong>
+                <input type="text" id="bookTitle" name="bookTitle" placeholder="Example: كتاب أناتومي" maxlength="20"
+                    required>
+            </label>
+
+            <label>
+                <strong>Description</strong>
+                <input type="text" id="bookDescription" name="bookDescription" rows="4"
+                    placeholder="Example: للدكتور فلان, ملخص كامل مع ملاحظات ..الخ" maxlength="60" required>
+            </label>
+
+            <button type="submit">Publish</button>
+        </form>
+        <br><br>
+        <hr>
+    </section>
+
+    <section class="section books">
+        <h2>Offers by you</h2>
+        <div class="cards-container" id="my-offers"></div>
+        <br><br>
+        <hr>
+    </section>
+
+    <section class="section books">
+        <h2>Offers by students</h2>
+        <div class="cards-container" id="students-offers"></div>
+    </section>
+</main>
+
+<style>
+    .exchange {
+        text-align: -webkit-center;
+    }
+
+    form {
+        width: 80%;
+    }
+
+    form label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1vmax;
+        align-items: center;
+        margin-bottom: 3vh;
+    }
+
+    form label select,
+    form label input {
+        padding: 0.7vmax;
+        width: 65%;
+        border: 0.1vmax var(--secondary) solid;
+        border-radius: 0.25vmax;
+        font-size: 0.8vmax;
+    }
+
+    form button {
+        width: 100%;
+        font-size: 1vmax;
+        padding: 0.25vmax;
+        border: none;
+        border-radius: 0.25vmax;
+        background-color: var(--secondary);
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    form button:hover {
+        opacity: 0.8;
+    }
+
+    form button:active {
+        scale: 0.95;
+    }
+
+    @media (max-width: 1366px) {
+        form label {
+            font-size: 1rem;
+        }
+
+        form label select,
+        form label input {
+            font-size: 0.8rem;
+        }
+
+        form button {
+            font-size: 1rem;
+        }
+    }
+
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2vmax;
+        justify-content: center;
+        padding: 2vmax;
+    }
+
+    .card {
+        border-radius: 1vmax;
+        box-shadow: 0 0 0.6vmax 0.3vmax var(--font);
+        transition: transform 0.3s ease-in-out;
+        text-align: -webkit-center;
+        padding: 1vmax;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .card img {
+        border-radius: 1vmax 1vmax 0 0;
+        width: 100%;
+    }
+
+    .card h1,
+    .card h2,
+    .card h3 {
+        margin: 0.25vmax 0;
+    }
+
+    .card h1 {
+        font-size: 2vmax;
+    }
+
+    .card h2 {
+        font-size: 1.35vmax;
+        color: var(--font);
+        text-transform: none;
+
+    }
+
+    .card h3 {
+        font-size: 1vmax;
+        color: var(--font);
+        font-weight: 400;
+    }
+
+    .options {
+        display: flex;
+        gap: 2%;
+    }
+
+    .card a {
+        display: block;
+        width: 100%;
+        font-size: 1vmax;
+        background-color: var(--font);
+        color: white;
+        padding: 0.25vmax;
+        border-radius: 0.25vmax;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    @media (max-width: 1366px) {
+        .card h1 {
+            font-size: 2rem;
+        }
+
+        .card h2 {
+            font-size: 1.35rem;
+
+        }
+
+        .card h3,
+        .card a {
+            font-size: 1rem;
+        }
+    }
+
+    .card a:hover {
+        background-color: var(--secondary);
+    }
+
+    .done {
+        mix-blend-mode: luminosity;
+    }
+</style>
+
+<script>
+    const user = {{{ json user }}};
+
+    const form = document.getElementById("bookForm");
+    const myOffers = document.getElementById('my-offers');
+    const studentsOffers = document.getElementById('students-offers');
+    const priceContainer = document.getElementById("priceContainer");
+    const bookType = document.getElementById("bookType");
+    const bookPrice = document.getElementById("bookPrice");
+
+    // Toggle the price field visibility based on the type selected
+    bookType.addEventListener("change", () => {
+        if (bookType.value === "Paid") {
+            priceContainer.style.display = "flex";
+            bookPrice.required = true;
+        } else {
+            priceContainer.style.display = "none";
+            bookPrice.required = false;
+            bookPrice.value = "";
+        }
+    });
+
+    // Handle form submission
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Get form values
+        const type = bookType.value;
+        const title = document.getElementById("bookTitle").value;
+        const description = document.getElementById("bookDescription").value;
+        const price = bookType.value === "Paid" ? bookPrice.value : "Free";
+
+        try {
+            // Send book data to the server
+            const response = await fetch("/db/add-book", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    type,
+                    title,
+                    description,
+                    price
+                })
+            });
+
+            if (response.ok) {
+                fetchBooks();
+            }
+
+            form.reset();
+            priceContainer.style.display = "none";
+        } catch (error) { }
+    });
+
+    function makeadeal(phone) {
+        if (confirm("Want to make a deal?")) {
+            open(`https://wa.me/962${phone}`);
+        }
+    }
+
+    function doneadeal(uniId, uid, id) {
+        if (confirm('Is this deal over?')) {
+            fetch('/db/done-book', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ uniId, uid, id }),
+            }).then(() => {
+                location.reload();
+            })
+        }
+    }
+
+    async function fetchBooks() {
+        try {
+            const response = await fetch("/db/get-books");
+            const books = await response.json();
+
+            myOffers.innerHTML = '';
+            studentsOffers.innerHTML = '';
+
+            books.forEach((book) => {
+                const card = document.createElement("div");
+                card.className = "card";
+
+                if (book.done) {
+                    card.classList.add('done');
+                }
+
+                let ownCard = '';
+                if (user.uniId === book.uid) {
+                    if (book.done) {
+                        ownCard = `<a onclick="alert('This deal is over!');"><i class="fa-solid fa-square-check"></i></a>`;
+                    } else {
+                        ownCard = `<a onclick="doneadeal('${user.uniId}', '${book.uid}', '${book.id}');"><i class="fa-solid fa-square-check"></i></a>`;
+                    }
+                } else {
+                    if (book.done) {
+                        ownCard = `<a onclick="alert('This deal is over!');"><i class="fa-solid fa-handshake-simple"></i></a>`;
+                    } else {
+                        ownCard = `<a onclick="makeadeal(${book.phone.replace(/\s/g, '')});"><i class="fa-solid fa-handshake-simple"></i></a>`;
+                    }
+                }
+
+                card.innerHTML = `
+                    <h1>${book.price}</h1>
+                    <h2>${book.title}</h2>
+                    <h3>${book.description}</h3>
+                    <div class="options">${ownCard}</div>
+                `;
+
+                if (user.uniId === book.uid) {
+                    myOffers.appendChild(card);
+                } else {
+                    studentsOffers.appendChild(card);
+                }
+            });
+        } catch (error) { }
+    }
+
+    fetchBooks();
+</script>

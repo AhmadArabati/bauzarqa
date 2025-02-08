@@ -1,0 +1,80 @@
+<script>
+    async function fetchBank() {
+        const degree = document.getElementById("degree").value;
+        const section = document.getElementById("section").value;
+
+        try {
+            const response = await fetch(`/db/get-bank/${degree}/${section}`);
+            const bank = await response.json();
+
+            bankCards.innerHTML = '';
+
+            if (bank.length === 0) {
+                bankCards.innerHTML = '<p>No bank records found.</p>';
+                return;
+            }
+
+            bank.forEach((subject) => {
+                const card = document.createElement("div");
+                card.className = "card";
+                card.innerHTML = `
+                <h1>${subject.name}</h1>
+                <h2>${subject.number}</h2>
+                <div class="options">
+                    <a href="${subject.link}" target="_blank"><i class="fa-solid fa-scroll"></i></a>
+                </div>
+            `;
+                bankCards.appendChild(card);
+            });
+        } catch (error) {
+            console.error("Error fetching bank records:", error);
+        }
+    }
+
+
+
+
+
+
+
+    function space() {
+        let height = 0, childBefore, added = false;
+        const section2 = document.querySelector("body > div > section:nth-child(2)");
+
+        Array.from(section2.children).forEach((child, i) => {
+            if (i > 0) {
+                childBefore = Array.from(section2.children)[i - 1];
+            }
+
+            if (height + child.clientHeight > 900) {
+                for (let ch of Array.from(childBefore.children)) {
+                    if (height + ch.clientHeight > 900) {
+                        ch.insertAdjacentHTML('afterend', '<div class="space large">');
+                        break;
+                    }
+                    else if (height + ch.clientHeight < 860 && ch === childBefore.lastElementChild) {
+                        child.insertAdjacentHTML('beforebegin', '<div class="space small">');
+                        break;
+                    }
+                    height += ch.clientHeight;
+                }
+            } else {
+                height += child.clientHeight;
+            }
+        });
+    }
+
+    function convertToBase64(input) {
+        const file = input.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            const base64String = reader.result;
+            document.getElementById("cv_img").src = base64String;
+            localStorage.setItem("cv_img_base64", base64String);
+        };
+    }
+
+</script>

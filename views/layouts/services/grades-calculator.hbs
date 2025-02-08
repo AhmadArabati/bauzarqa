@@ -1,0 +1,242 @@
+<main>
+    <section class="section">
+        <h2>Grades Calculator</h2>
+        <br>
+        <div class="add-subject">
+            <input type="text" id="sub-name" min="1" step="1" placeholder="اسم المادة">
+            <input type="number" id="sub-hours" min="1" step="1" placeholder="الساعات">
+            <select id="section">
+                <option value="4.0">A</option>
+                <option value="3.75">A-</option>
+                <option value="3.5">B+</option>
+                <option value="3.0">B</option>
+                <option value="2.75">B-</option>
+                <option value="2.5">C+</option>
+                <option value="2.0">C</option>
+                <option value="1.75">C-</option>
+                <option value="1.5">D+</option>
+                <option value="1.0">D</option>
+                <option value="0.75">D-</option>
+                <option value="0.5">F*</option>
+                <option value="0.0">F-</option>
+            </select>
+            <button onclick="add()"><i class="fa-solid fa-square-plus"></i></button>
+        </div>
+        <br>
+        <hr>
+    </section>
+
+    <section class="section grades-section none">
+        <h2>Grades Table</h2>
+        <br>
+        <div id="grades-table">
+            <div class="sub-grades result">
+                <input type="text" class="sub-name hidden" disabled>
+                <input type="text" class="sub-hours" disabled>
+                <input type="text" class="sub-grade" disabled>
+                <button class="hidden"></button>
+            </div>
+        </div>
+    </section>
+</main>
+
+<style>
+    .add-subject {
+        width: 100%;
+        display: flex;
+        gap: 2%;
+        direction: rtl;
+    }
+
+    .add-subject select,
+    .add-subject input {
+        padding: 0.7vmax;
+        width: 20%;
+        border: 0.1vmax var(--secondary) solid;
+        border-radius: 0.25vmax;
+        font-size: 0.8vmax;
+        text-align: center;
+        direction: ltr;
+    }
+
+    .add-subject input:nth-child(1) {
+        width: 45%;
+    }
+
+    .add-subject button {
+        width: 15%;
+        font-size: 1vmax;
+        padding: 0.25vmax;
+        border: none;
+        border-radius: 0.25vmax;
+        background-color: var(--secondary);
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .add-subject button:hover {
+        opacity: 0.8;
+    }
+
+    .add-subject button:active {
+        scale: 0.95;
+    }
+
+    @media (max-width: 1366px) {
+        .add-subject select {
+            font-size: 0.8rem;
+        }
+
+        .add-subject button {
+            font-size: 1rem;
+        }
+    }
+
+    .none {
+        display: none;
+    }
+
+    .sub-grades {
+        width: 100%;
+        display: flex;
+        gap: 2%;
+        direction: rtl;
+        margin-bottom: 1vh;
+    }
+
+    .sub-grades input {
+        padding: 0.7vmax;
+        width: 20%;
+        border: 0.1vmax var(--secondary) solid;
+        border-radius: 0.25vmax;
+        font-size: 0.8vmax;
+        text-align: center;
+        direction: ltr;
+    }
+
+    .sub-grades input:nth-child(1) {
+        width: 45%;
+    }
+
+    .sub-grades button {
+        width: 15%;
+        font-size: 1vmax;
+        padding: 0.25vmax;
+        border: none;
+        border-radius: 0.25vmax;
+        background-color: #C70000;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .sub-grades button:hover {
+        opacity: 0.8;
+    }
+
+    .sub-grades button:active {
+        scale: 0.95;
+    }
+
+    @media (max-width: 1366px) {
+        .sub-grades button {
+            font-size: 1rem;
+        }
+    }
+
+    .result {
+        margin-top: auto;
+        display: flex;
+        gap: 2%;
+        padding-top: 10px;
+        margin-top: 3vh;
+        border-top: 2px solid #ddd;
+    }
+
+    .result .hidden {
+        background-color: transparent;
+        border: none;
+        color: transparent;
+    }
+</style>
+
+<script>
+    const gradesSection = document.querySelector('.grades-section');
+    const gradesTable = document.querySelector('.result');
+
+    // Function to add subject to grades table
+    function add() {
+        const name = document.getElementById("sub-name").value.trim();
+        const hours = document.getElementById("sub-hours").value.trim();
+        const grade = document.getElementById("section").value;
+
+        if (!name || !hours || isNaN(hours) || hours <= 0) {
+            alert("Please enter a valid subject name and credit hours.");
+            return;
+        }
+
+        // Create new row
+        const row = document.createElement("div");
+        row.className = "sub-grades";
+        row.innerHTML = `
+        <input type="text" class="sub-name" value="${name}" disabled>
+        <input type="text" class="sub-hours" value="${hours}" disabled>
+        <input type="text" class="sub-grade" value="${grade}" disabled>
+        <button onclick="remove(this.parentElement)"><i class="fa-solid fa-trash-can"></i></button>
+    `;
+
+        gradesTable.before(row);
+
+        // Clear inputs
+        document.getElementById("sub-name").value = "";
+        document.getElementById("sub-hours").value = "";
+
+        calculateGPA();
+        gradesSection.classList.remove('none');
+    }
+
+    // Function to remove a subject
+    function remove(element) {
+        element.remove();
+        calculateGPA();
+
+        // Check if there are any subjects left
+        const rows = document.querySelectorAll(".sub-grades:not(.result)");
+        if (rows.length === 0) {
+            gradesSection.classList.add('none'); // Hide the section if empty
+        }
+    }
+
+    // Function to calculate GPA
+    function calculateGPA() {
+        const rows = document.querySelectorAll(".sub-grades:not(.result)");
+        let totalHours = 0, totalPoints = 0;
+
+        rows.forEach(row => {
+            const hours = parseFloat(row.querySelector(".sub-hours").value);
+            const grade = parseFloat(row.querySelector(".sub-grade").value);
+
+            totalHours += hours;
+            totalPoints += hours * grade;
+        });
+
+        const gpa = totalHours ? (totalPoints / totalHours).toFixed(2) : "0.00";
+
+        // Ensure .result exists at the bottom
+        let resultRow = document.querySelector(".result");
+        if (!resultRow) {
+            resultRow = document.createElement("div");
+            resultRow.className = "sub-grades result";
+            resultRow.innerHTML = `
+            <input type="text" class="sub-hours" disabled>
+            <input type="text" class="sub-grade" disabled>
+        `;
+            document.getElementById("grades-table").appendChild(resultRow);
+        }
+
+        // Update total hours & GPA
+        resultRow.querySelector(".sub-hours").value = totalHours;
+        resultRow.querySelector(".sub-grade").value = gpa;
+    }
+</script>
