@@ -17,13 +17,14 @@
     "firebase-admin": "^13.0.2",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
+    "playwright": "^1.50.1",
     "puppeteer": "^24.2.0",
     "ws": "^8.18.0"
   },
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "postinstall": "npx puppeteer browsers install"
+    "postinstall": "npx playwright install"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
