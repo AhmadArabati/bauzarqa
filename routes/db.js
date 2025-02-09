@@ -7,6 +7,11 @@ const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
 
+async function chrome() {
+    console.log("Using Chrome from:", await puppeteer.executablePath());
+}
+chrome();
+
 async function hashPassword() {
     const password = '';
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -413,7 +418,7 @@ router.post("/make-cv", loggedIn, async (req, res) => {
         });
     } catch (error) {
         console.error("Error generating CV:", error);
-        res.status(500).json({ error: "Something went wrong!" });
+        res.status(500).json({ error });
     }
 });
 
