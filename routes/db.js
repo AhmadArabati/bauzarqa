@@ -369,7 +369,12 @@ const pdfDir = path.join("./public/services/cv-maker/cvs");
 if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
 
 async function generateCV(htmlContent) {
-    const browser = await chromium.launch({ headless: true });
+    const browser = await chromium.launch({
+        headless: true,
+        executablePath: process.env.PLAYWRIGHT_BROWSERS_PATH
+            ? require('playwright').chromium.executablePath()
+            : undefined
+    });
     const page = await browser.newPage();
     
     await page.setContent(htmlContent, { waitUntil: "domcontentloaded" });
