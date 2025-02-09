@@ -7,11 +7,6 @@ const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
 
-async function chrome() {
-    console.log("Using Chrome from:", await puppeteer.executablePath());
-}
-chrome();
-
 async function hashPassword() {
     const password = '';
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -375,6 +370,7 @@ if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
 async function generateCV(htmlContent) {
     const browser = await puppeteer.launch({
         headless: "new",
+        executablePath: "/usr/bin/google-chrome-stable",
         args: [
             "--no-sandbox",
             "--disable-setuid-sandbox",
@@ -383,8 +379,8 @@ async function generateCV(htmlContent) {
             "--single-process"
         ]
     });
+    
     const page = await browser.newPage();
-
     await page.setContent(htmlContent, { waitUntil: "networkidle0" });
 
     const randomId = Math.random().toString(36).substring(2, 10);
