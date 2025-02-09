@@ -369,18 +369,20 @@ if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
 
 async function generateCV(htmlContent) {
     const browser = await puppeteer.launch({
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/google-chrome-stable',
-        headless: true,
+        headless: "new",
         args: [
             "--no-sandbox",
-            "--disable-setuid-sandbox"
+            "--disable-setuid-sandbox",
+            "--disable-gpu",
+            "--disable-dev-shm-usage",
+            "--single-process"
         ]
     });
     const page = await browser.newPage();
 
     await page.setContent(htmlContent, { waitUntil: "networkidle0" });
 
-    const randomId = Math.random().toString(36).substring(2, 10); 
+    const randomId = Math.random().toString(36).substring(2, 10);
     const pdfPath = path.join(pdfDir, `cv-${randomId}.pdf`);
 
     await page.pdf({ path: pdfPath, format: "A4", printBackground: true });
@@ -411,7 +413,7 @@ router.post("/make-cv", loggedIn, async (req, res) => {
         });
     } catch (error) {
         console.error("Error generating CV:", error);
-        res.status(500).json({ error });
+        res.status(500).json({ error: "Something went wrong!" });
     }
 });
 
