@@ -9,8 +9,8 @@ const https = require('http');
 const fs = require('fs');
 const WebSocket = require("ws");
 
-const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS); //
-// const serviceAccount = require('./credentials.json');
+// const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS); //
+const serviceAccount = require('./credentials.json');
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://bauzarqa.firebaseapp.com',
@@ -31,8 +31,8 @@ const options = {
 };
 
 const server = https.createServer(options, app);
-const wss = new WebSocket.Server({ server }); //
-// const wss = new WebSocket.Server({ port: 8080 });
+// const wss = new WebSocket.Server({ server }); //
+const wss = new WebSocket.Server({ port: 8080 });
 
 wss.on("connection", (ws) => {
     console.log("Client connected");
@@ -118,10 +118,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set("trust proxy", 1);
 app.use(
     session({
-        secret: process.env.SESSION_SECRET, //
+        secret: 'process.env.SESSION_SECRET', //
         resave: false,
         saveUninitialized: false,
-        cookie: { secure: true, httpOnly: true, sameSite: 'strict', maxAge: 1000 * 60 * 30 }, //
+        cookie: { secure: false, httpOnly: true, sameSite: 'strict', maxAge: 1000 * 60 * 30 }, //
     })
 );
 
