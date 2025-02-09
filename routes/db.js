@@ -370,13 +370,10 @@ if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
 async function generateCV(htmlContent) {
     const browser = await puppeteer.launch({
         headless: "new",
-        executablePath: "/usr/bin/chromium-browser",
+        executablePath: puppeteer.executablePath(),
         args: [
             "--no-sandbox",
             "--disable-setuid-sandbox",
-            "--disable-gpu",
-            "--disable-dev-shm-usage",
-            "--single-process"
         ]
     });
 
