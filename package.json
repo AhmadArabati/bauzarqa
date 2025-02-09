@@ -24,7 +24,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "postinstall": "npx playwright install"
+    "postinstall": "npx playwright install --with-deps"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
