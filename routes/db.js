@@ -368,7 +368,13 @@ const pdfDir = path.join("./public/services/cv-maker/cvs");
 if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
 
 async function generateCV(htmlContent) {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: [
+            "--no-sandbox",
+            "--disable-setuid-sandbox"
+        ]
+    });
     const page = await browser.newPage();
 
     await page.setContent(htmlContent, { waitUntil: "networkidle0" });
@@ -392,7 +398,7 @@ router.post("/make-cv", loggedIn, async (req, res) => {
             return res.status(400).json({ error: "Missing required fields" });
         }
 
-        const pdfPath = await generateCV(html, 'user.uniId');
+        const pdfPath = await generateCV(html);
         const fileName = path.basename(pdfPath);
 
         const serverUrl = `${req.protocol}://${req.get("host")}`;
