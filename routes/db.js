@@ -364,9 +364,7 @@ router.get("/get-chat", loggedIn, async (req, res) => {
     }
 });
 
-const pdfDir = path.join('/tmp', 'cv-maker-cvs');
-if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
-
+const pdfDir = path.join("public", "cvs");
 async function generateCV(htmlContent) {
     try {
         const browser = await puppeteer.launch({
@@ -402,7 +400,7 @@ router.post("/make-cv", loggedIn, async (req, res) => {
         const fileName = path.basename(pdfPath);
 
         const serverUrl = `${req.protocol}://${req.get("host")}`;
-        const downloadUrl = `${serverUrl}/services/cv-maker/cvs/${fileName}`;
+        const downloadUrl = `${serverUrl}/cvs/${fileName}`;
 
         res.status(200).json({
             message: "CV Created successfully!",
