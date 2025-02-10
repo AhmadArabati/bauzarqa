@@ -24,7 +24,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "postinstall": "npx puppeteer browsers install"
+    "postinstall": "npx puppeteer browsers install chrome"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"
