@@ -364,17 +364,14 @@ router.get("/get-chat", loggedIn, async (req, res) => {
     }
 });
 
-const pdfDir = path.join(__dirname, "../public/services/cv-maker/cvs");
+const pdfDir = path.join(__dirname, 'generated_cvs');
 if (!fs.existsSync(pdfDir)) {
     fs.mkdirSync(pdfDir, { recursive: true });
 }
 
 async function generateCV(htmlContent) {
     try {
-        const browser = await puppeteer.launch({
-            executablePath: process.env.NODE_ENV === 'production' ? process.env.PUPPETEER_EXCUTABLE_PATH : puppeteer.executablePath(),
-            args: ['--no-sandbox', '--disable-setuid-sandbox', '--single-process', '--no-zygote']
-        });
+        const browser = await puppeteer.launch();
 
         const page = await browser.newPage();
         await page.setContent(htmlContent, { waitUntil: 'load' });
@@ -404,7 +401,7 @@ router.post("/make-cv", loggedIn, async (req, res) => {
         const fileName = path.basename(pdfPath);
 
         const serverUrl = `${req.protocol}://${req.get("host")}`;
-        const downloadUrl = `${serverUrl}/services/cv-maker/cvs/${fileName}`;
+        const downloadUrl = `${serverUrl}/generated_cvs/${fileName}`;
 
         res.status(200).json({
             message: "CV Created successfully!",
@@ -416,6 +413,16 @@ router.post("/make-cv", loggedIn, async (req, res) => {
     }
 });
 
-router.use("/services/cv-maker/cvs", express.static(pdfDir));
+router.get('/generated_cvs/:pdf', (req, res) => {
+    const { pdf } = req.params;
+    const filePath = path.join(pdfDir, pdf);
+    console.log('filePath: ', filePath);
+    
+    if (fs.existsSync(filePath)) {
+        res.sendFile(filePath);
+    } else {
+        res.status(404).json({ error: "PDF not found" });
+    }
+});
 
 module.exports = router;
