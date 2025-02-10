@@ -6,7 +6,6 @@ const cloudinary = require('cloudinary').v2;
 const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
-const { chromium } = require('playwright');
 
 async function hashPassword() {
     const password = '';
@@ -369,15 +368,13 @@ const pdfDir = path.join("./public/services/cv-maker/cvs");
 if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
 
 async function generateCV(htmlContent) {
-    const browser = await chromium.launch({
-        headless: true,
-        executablePath: process.env.PLAYWRIGHT_BROWSERS_PATH
-            ? require('playwright').chromium.executablePath()
-            : undefined
+    const browser = await puppeteer.launch({
+        executablePath: '/usr/bin/chromium-browser',
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
-    const page = await browser.newPage();
-    
-    await page.setContent(htmlContent, { waitUntil: "domcontentloaded" });
+        const page = await browser.newPage();
+
+    await page.setContent(htmlContent, { waitUntil: "load" });
 
     const randomId = Math.random().toString(36).substring(2, 10);
     const pdfPath = path.join(pdfDir, `cv-${randomId}.pdf`);
@@ -390,6 +387,8 @@ async function generateCV(htmlContent) {
 }
 
 router.post("/make-cv", loggedIn, async (req, res) => {
+    const user = req.session.user;
+
     try {
         const { html } = req.body;
         if (!html) {
@@ -408,7 +407,7 @@ router.post("/make-cv", loggedIn, async (req, res) => {
         });
     } catch (error) {
         console.error("Error generating CV:", error);
-        res.status(500).json({ error: "Something went wrong!" });
+        res.status(500).json({ error });
     }
 });
 
