@@ -365,12 +365,7 @@ router.get("/get-chat", loggedIn, async (req, res) => {
 });
 
 async function logChromiumPath() {
-    const browser = await puppeteer.launch();
-    
-    // Log the executable path of Chromium
     console.log('Chromium executable path:', puppeteer.executablePath());
-    
-    await browser.close();
 }
 
 logChromiumPath();
