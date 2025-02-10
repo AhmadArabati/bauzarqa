@@ -364,7 +364,7 @@ router.get("/get-chat", loggedIn, async (req, res) => {
     }
 });
 
-const pdfDir = path.join("./public/services/cv-maker/cvs");
+const pdfDir = path.join("../public/services/cv-maker/cvs");
 if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
 
 async function generateCV(htmlContent) {
@@ -386,7 +386,6 @@ async function generateCV(htmlContent) {
         return pdfPath;
     } catch (error) {
         console.error('Error generating CV:', error);
-        throw error;
     }
 }
 
