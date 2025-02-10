@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const admin = require('firebase-admin');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 const db = admin.firestore();
 
