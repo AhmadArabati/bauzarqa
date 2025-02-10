@@ -7,6 +7,8 @@ const puppeteer = require("puppeteer-core");
 const fs = require("fs");
 const path = require("path");
 
+console.log('Exists:', fs.existsSync('/opt/render/.cache/puppeteer/chrome/linux-133.0.6943.53/chrome-linux64/chrome'));
+
 async function hashPassword() {
     const password = '';
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -372,7 +374,8 @@ async function generateCV(htmlContent) {
         const browser = await puppeteer.launch({
             executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
             headless: true,
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            timeout: 60000
         });
 
         const page = await browser.newPage();
