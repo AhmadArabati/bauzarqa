@@ -364,12 +364,23 @@ router.get("/get-chat", loggedIn, async (req, res) => {
     }
 });
 
+async function logChromiumPath() {
+    const browser = await puppeteer.launch();
+    
+    // Log the executable path of Chromium
+    console.log('Chromium executable path:', puppeteer.executablePath());
+    
+    await browser.close();
+}
+
+logChromiumPath();
+
 const pdfDir = path.join("./public/services/cv-maker/cvs");
 if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
 
 async function generateCV(htmlContent) {
     const browser = await puppeteer.launch({
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+        executablePath: puppeteer.executablePath(),
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
         const page = await browser.newPage();
