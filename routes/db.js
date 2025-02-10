@@ -404,7 +404,7 @@ router.post("/make-cv", loggedIn, async (req, res) => {
         const fileName = path.basename(pdfPath);
 
         const serverUrl = `${req.protocol}://${req.get("host")}`;
-        const downloadUrl = `${serverUrl}/tmp/cvs/${fileName}`;
+        const downloadUrl = `${serverUrl}/cvs/${fileName}`;
 
         res.status(200).json({
             message: "CV Created successfully!",
@@ -416,6 +416,6 @@ router.post("/make-cv", loggedIn, async (req, res) => {
     }
 });
 
-router.use("/tmp/cvs", express.static(pdfDir));
+router.use("/cvs", express.static(pdfDir));
 
 module.exports = router;
