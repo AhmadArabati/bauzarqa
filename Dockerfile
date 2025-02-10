@@ -7,10 +7,5 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 RUN npm ci
-
 COPY . .
-
-# Ensure the directory exists (without chmod)
-RUN mkdir -p /usr/src/app/public/services/cv-maker/cvs
-
 CMD [ "node", "index.js" ]
