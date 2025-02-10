@@ -364,7 +364,7 @@ router.get("/get-chat", loggedIn, async (req, res) => {
     }
 });
 
-const pdfDir = path.join(__dirname, 'generated_cvs');
+const pdfDir = path.join('generated_cvs');
 if (!fs.existsSync(pdfDir)) {
     fs.mkdirSync(pdfDir, { recursive: true });
 }
