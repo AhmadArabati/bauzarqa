@@ -108,7 +108,7 @@ router.get('/services/cv-maker', loggedIn, (req, res) => {
 
 router.get('/generated_cvs/:pdf', (req, res) => {
     const { pdf } = req.params;
-    const filePath = path.join(pdfDir, pdf);
+    const filePath = path.join('generated_cvs', pdf);
     console.log('filePath: ', filePath);
     
     if (fs.existsSync(filePath)) {
