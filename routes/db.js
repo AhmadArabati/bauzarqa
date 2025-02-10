@@ -7,8 +7,6 @@ const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
 
-console.log('Exists:', fs.existsSync('/opt/render/.cache/puppeteer/chrome/linux-133.0.6943.53/chrome-linux64/chrome'));
-
 async function hashPassword() {
     const password = '';
     const hashedPassword = await bcrypt.hash(password, 10);
