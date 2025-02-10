@@ -114,6 +114,7 @@ app.set('views', path.join(__dirname, 'views/layouts'));
 app.set('view engine', 'hbs');
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/cvs', express.static(path.join(__dirname, 'public/services/cv-maker/cvs')));
 
 app.set("trust proxy", 1);
 app.use(
