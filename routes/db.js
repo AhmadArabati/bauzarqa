@@ -413,16 +413,4 @@ router.post("/make-cv", loggedIn, async (req, res) => {
     }
 });
 
-router.get('/generated_cvs/:pdf', (req, res) => {
-    const { pdf } = req.params;
-    const filePath = path.join(pdfDir, pdf);
-    console.log('filePath: ', filePath);
-    
-    if (fs.existsSync(filePath)) {
-        res.sendFile(filePath);
-    } else {
-        res.status(404).json({ error: "PDF not found" });
-    }
-});
-
 module.exports = router;
