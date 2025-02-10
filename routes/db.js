@@ -3,7 +3,7 @@ const multer = require('multer');
 const bcrypt = require('bcryptjs');
 const admin = require('firebase-admin');
 const cloudinary = require('cloudinary').v2;
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const fs = require("fs");
 const path = require("path");
 
@@ -368,22 +368,27 @@ const pdfDir = path.join("./public/services/cv-maker/cvs");
 if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
 
 async function generateCV(htmlContent) {
-    const browser = await puppeteer.launch({
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
+    try {
+        const browser = await puppeteer.launch({
+            executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+            headless: true,
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
+        });
+
         const page = await browser.newPage();
+        await page.setContent(htmlContent, { waitUntil: 'load' });
 
-    await page.setContent(htmlContent, { waitUntil: "load" });
+        const randomId = Math.random().toString(36).substring(2, 10);
+        const pdfPath = path.join(pdfDir, `cv-${randomId}.pdf`);
+        await page.pdf({ path: pdfPath, format: 'A4', printBackground: true });
 
-    const randomId = Math.random().toString(36).substring(2, 10);
-    const pdfPath = path.join(pdfDir, `cv-${randomId}.pdf`);
-
-    await page.pdf({ path: pdfPath, format: "A4", printBackground: true });
-
-    await browser.close();
-    console.log("PDF generated:", pdfPath);
-    return pdfPath;
+        await browser.close();
+        console.log('PDF generated:', pdfPath);
+        return pdfPath;
+    } catch (error) {
+        console.error('Error generating CV:', error);
+        throw error;
+    }
 }
 
 router.post("/make-cv", loggedIn, async (req, res) => {
