@@ -3,7 +3,7 @@ const multer = require('multer');
 const bcrypt = require('bcryptjs');
 const admin = require('firebase-admin');
 const cloudinary = require('cloudinary').v2;
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
 
@@ -372,8 +372,8 @@ if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
 async function generateCV(htmlContent) {
     try {
         const browser = await puppeteer.launch({
-            headless: 'new',
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
+            executablePath: process.env.NODE_ENV === 'production' ? process.env.PUPPETEER_EXCUTABLE_PATH : puppeteer.executablePath(),
+            args: ['--no-sandbox', '--disable-setuid-sandbox', '--single-process', '--no-zygote']
         });
 
         const page = await browser.newPage();
