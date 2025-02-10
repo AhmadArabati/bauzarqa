@@ -364,7 +364,7 @@ router.get("/get-chat", loggedIn, async (req, res) => {
     }
 });
 
-const pdfDir = path.join('generated_cvs');
+const pdfDir = path.join('generated_cvs', 'services/cv-maker/cvs');
 if (!fs.existsSync(pdfDir)) {
     fs.mkdirSync(pdfDir, { recursive: true });
 }
@@ -401,7 +401,7 @@ router.post("/make-cv", loggedIn, async (req, res) => {
         const fileName = path.basename(pdfPath);
 
         const serverUrl = `${req.protocol}://${req.get("host")}`;
-        const downloadUrl = `${serverUrl}/generated_cvs/${fileName}`;
+        const downloadUrl = `${serverUrl}/services/cv-maker/cvs/${fileName}`;
 
         res.status(200).json({
             message: "CV Created successfully!",
