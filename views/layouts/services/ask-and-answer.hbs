@@ -1,0 +1,309 @@
+<main>
+    <section class="section exchange">
+        <h2>Ask Question</h2>
+        <br>
+        <form id="questionForm">
+            <label>
+                <strong>Name</strong>
+                <select name="questionType" id="questionType" required>
+                    <option value="{{user.name}}">{{user.name}}</option>
+                    <option value="Anonymous">Anonymous</option>
+                </select>
+            </label>
+
+            <label>
+                <strong>Title</strong>
+                <input type="text" id="questionTitle" name="questionTitle" placeholder="Question Title" maxlength="20"
+                    required>
+            </label>
+
+            <label>
+                <strong>Description</strong>
+                <input type="text" id="questionDescription" name="questionDescription" rows="4"
+                    placeholder="Explain what you mean further" maxlength="60" required>
+            </label>
+
+            <button type="submit">Publish</button>
+        </form>
+        <br><br>
+        <hr>
+    </section>
+
+    <section class="section questions">
+        <h2>Questions by you</h2>
+        <div class="cards-container" id="my-offers"></div>
+        <br><br>
+        <hr>
+    </section>
+
+    <section class="section questions">
+        <h2>Questions by students</h2>
+        <div class="cards-container" id="students-offers"></div>
+    </section>
+</main>
+
+<style>
+    .exchange {
+        text-align: -webkit-center;
+    }
+
+    form {
+        width: 80%;
+    }
+
+    form label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1vmax;
+        align-items: center;
+        margin-bottom: 3vh;
+    }
+
+    form label select,
+    form label input {
+        padding: 0.7vmax;
+        width: 65%;
+        border: 0.1vmax var(--secondary) solid;
+        border-radius: 0.25vmax;
+        font-size: 0.8vmax;
+    }
+
+    form button {
+        width: 100%;
+        font-size: 1vmax;
+        padding: 0.25vmax;
+        border: none;
+        border-radius: 0.25vmax;
+        background-color: var(--secondary);
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    form button:hover {
+        opacity: 0.8;
+    }
+
+    form button:active {
+        scale: 0.95;
+    }
+
+    @media (max-width: 1366px) {
+        form label {
+            font-size: 1rem;
+        }
+
+        form label select,
+        form label input {
+            font-size: 0.8rem;
+        }
+
+        form button {
+            font-size: 1rem;
+        }
+    }
+
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2vmax;
+        justify-content: center;
+        padding: 2vmax;
+    }
+
+    .card {
+        border-radius: 1vmax;
+        box-shadow: 0 0 0.6vmax 0.3vmax var(--font);
+        transition: transform 0.3s ease-in-out;
+        text-align: -webkit-center;
+        padding: 1vmax;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .card img {
+        border-radius: 1vmax 1vmax 0 0;
+        width: 100%;
+    }
+
+    .card h1,
+    .card h2,
+    .card h3 {
+        margin: 0.25vmax 0;
+    }
+
+    .card h1 {
+        font-size: 2vmax;
+    }
+
+    .card h2 {
+        font-size: 1.35vmax;
+        color: var(--font);
+        text-transform: none;
+
+    }
+
+    .card h3 {
+        font-size: 1vmax;
+        color: var(--font);
+        font-weight: 400;
+    }
+
+    .options {
+        display: flex;
+        gap: 2%;
+    }
+
+    .card a {
+        display: block;
+        width: 100%;
+        font-size: 1vmax;
+        background-color: var(--font);
+        color: white;
+        padding: 0.25vmax;
+        border-radius: 0.25vmax;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    @media (max-width: 1366px) {
+        .card h1 {
+            font-size: 2rem;
+        }
+
+        .card h2 {
+            font-size: 1.35rem;
+
+        }
+
+        .card h3,
+        .card a {
+            font-size: 1rem;
+        }
+    }
+
+    .card a:hover {
+        background-color: var(--secondary);
+    }
+
+    .done {
+        mix-blend-mode: luminosity;
+    }
+</style>
+
+<script>
+    const user = {{{ json user }}};
+
+    const form = document.getElementById("questionForm");
+    const myOffers = document.getElementById('my-offers');
+    const studentsOffers = document.getElementById('students-offers');
+    const priceContainer = document.getElementById("priceContainer");
+    const questionType = document.getElementById("questionType");
+    const questionPrice = document.getElementById("questionPrice");
+
+    // Handle form submission
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        // Get form values
+        const name = questionType.value;
+        const title = document.getElementById("questionTitle").value;
+        const description = document.getElementById("questionDescription").value;
+        const price = questionType.value === "Paid" ? questionPrice.value : "Free";
+
+        try {
+            // Send question data to the server
+            const response = await fetch("/db/add-question", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name,
+                    title,
+                    description,
+                    price
+                })
+            });
+
+            if (response.ok) {
+                fetchQuestions();
+            }
+
+            form.reset();
+            priceContainer.style.display = "none";
+        } catch (error) { }
+    });
+
+    function doneaquestion(uniId, uid, id) {
+        if (confirm('Is this question over?')) {
+            fetch('/db/done-question', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ uniId, uid, id }),
+            }).then(() => {
+                location.reload();
+            })
+        }
+    }
+
+    async function fetchQuestions() {
+        try {
+            const response = await fetch("/db/get-questions");
+            const questions = await response.json();
+
+            myOffers.innerHTML = '';
+            studentsOffers.innerHTML = '';
+
+            questions.forEach((question) => {
+                const card = document.createElement("div");
+                card.className = "card";
+
+                if (question.done) {
+                    card.classList.add('done');
+                }
+
+                let ownCard = '';
+                if (user.uniId === question.uid) {
+                    if (question.done) {
+                        ownCard = `
+                        <a onclick="alert('This question is over!');"><i class="fa-solid fa-square-check"></i></a>
+                        <a onclick="alert('This question is over!');"><i class="fa-solid fa-comment-dots"></i></a>`;
+                    } else {
+                        ownCard = `
+                        <a onclick="doneaquestion('${user.uniId}', '${question.uid}', '${question.id}');"><i class="fa-solid fa-square-check"></i></a>
+                        <a href="/services/ask-and-answer/${question.id}"><i class="fa-solid fa-comment-dots"></i></a>`;
+                    }
+                } else {
+                    if (question.done) {
+                        ownCard = `<a onclick="alert('This question is over!');"><i class="fa-solid fa-comment-dots"></i></a>`;
+                    } else {
+                        ownCard = `<a href="/services/ask-and-answer/${question.id}"><i class="fa-solid fa-comment-dots"></i></a>`;
+                    }
+                }
+
+                card.innerHTML = `
+                    <h1>${question.name}</h1>
+                    <h2>${question.title}</h2>
+                    <h3>${question.description}</h3>
+                    <div class="options">${ownCard}</div>
+                `;
+
+                if (user.uniId === question.uid) {
+                    myOffers.appendChild(card);
+                } else {
+                    studentsOffers.appendChild(card);
+                }
+            });
+        } catch (error) { }
+    }
+
+    fetchQuestions();
+</script>

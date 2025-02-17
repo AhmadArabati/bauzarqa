@@ -114,6 +114,8 @@ app.set('views', path.join(__dirname, 'views/layouts'));
 app.set('view engine', 'hbs');
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'generated_cvs')));
+app.use(express.static(path.join(__dirname, 'generated_books')));
 
 app.set("trust proxy", 1);
 app.use(
