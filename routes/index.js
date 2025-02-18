@@ -134,7 +134,7 @@ router.get('/services/field-training/:major', loggedIn, (req, res) => {
     }
 });
 
-router.get('/sitemap', (req, res) => {
+router.get('/urlset.xml', (req, res) => {
     res.header('Content-Type', 'application/xml');
 
     const home = 'https://bauzarqa.onrender.com/';
