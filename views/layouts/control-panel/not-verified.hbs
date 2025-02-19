@@ -42,16 +42,16 @@
     .card h2,
     .card h3 {
         margin: 0.25vmax 0;
+        text-transform: none;
     }
 
     .card h1 {
-        font-size: 2vmax;
+        font-size: 1.5vmax;
     }
 
     .card h2 {
         font-size: 1.35vmax;
         color: var(--font);
-        text-transform: none;
 
     }
 
@@ -89,11 +89,11 @@
 
     @media (max-width: 1366px) {
         .card h1 {
-            font-size: 2rem;
+            font-size: 1.3rem;
         }
 
         .card h2 {
-            font-size: 1.35rem;
+            font-size: 1.1rem;
 
         }
 
@@ -127,8 +127,8 @@
             <h2>${user.uniId}</h2>
             <h3><a href="https://wa.me/962${user.phone}" target="_blank">${user.phone}</a></h3>
             <div class="options" bis_skin_checked="1">
-                <a href="/control-panel/verify-user?id=${user.id}" onclick="copy(${user.uniId})">VERIFY</a>
-                <a href="/control-panel/remove-user?id=${user.id}">REMOVE</a>
+                <a href="/control-panel/verify-user?id=${user.id}" onclick="copy(${user.uniId})"><i class="fa-solid fa-check-to-slot"></i></a>
+                <a href="/control-panel/remove-user?id=${user.id}"><i class="fa-solid fa-trash"></i></a>
             </div>`;
 
             usersCards.appendChild(card);
