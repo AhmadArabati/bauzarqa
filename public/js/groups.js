@@ -99,6 +99,10 @@ const groups = [
         link: 'https://chat.whatsapp.com/JBET9jOePVMEiHrHxmJR3F',
         image: 'حيويه فصل ثاني (د.احمد) بكالوريوس'
     },
+    {
+        name: 'طحالب فصل ثاني',
+        link: 'https://chat.whatsapp.com/FLsuOFmU6EV7aMC3rT07P9'
+    },
     // {
     //     name: 'BAU Zarqa',
     //     link: 'https://chat.whatsapp.com/L4KJ6jiyKN0IPH3lT2pCmO'
