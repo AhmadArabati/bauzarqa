@@ -22,6 +22,7 @@ const db = admin.firestore();
 
 const indexRoute = require('./routes/index');
 const dbRoute = require('./routes/db');
+const controlPanelRoute = require('./routes/control-panel');
 
 const app = express();
 
@@ -92,6 +93,7 @@ app.use((req, res, next) => {
     next();
 });
 
+const admins = ['32217030050', '32217030157', '32217030131', '32217036081', '32217030137'];
 const hbs = handlebars.create({
     defaultLayout: 'layout',
     extname: 'hbs',
@@ -99,6 +101,13 @@ const hbs = handlebars.create({
         eq: (a, b) => a === b,
         json: function (context) {
             return JSON.stringify(context);
+        },
+        isAdmin: function (uniId, options) {
+            if (admins.includes(uniId)) {
+                return options.fn(this);
+            } else {
+                return options.inverse(this);
+            }
         }
     },
     layoutsDir: path.join(__dirname, 'views/layouts'),
@@ -131,5 +140,6 @@ app.use(flash());
 
 app.use('/', indexRoute);
 app.use('/db', dbRoute);
+app.use('/control-panel', controlPanelRoute);
 
 server.listen(3000, () => console.log('HTTPS Server running on port 3000'));

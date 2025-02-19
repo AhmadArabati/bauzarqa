@@ -13,6 +13,9 @@
             {{#if user}}
             <li><a href="#{{user.name}}">{{user.name}}</a></li>
             <li><a href="/user/sign-out">Log Out</a></li>
+            {{#isAdmin user.uniId}}
+            <li><a href="/control-panel/not-verified">Admin</a></li>
+            {{/isAdmin}}
             {{else}}
             <li><a href="/user/sign-up">Join Us</a></li>
             {{/if}}

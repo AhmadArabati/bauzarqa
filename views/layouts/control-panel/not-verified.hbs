@@ -1,0 +1,139 @@
+<main>
+    <section class="section">
+        <h2>Not Verified Users</h2>
+        <br>
+        <hr>
+    </section>
+
+    <section class="section users">
+        <div class="cards-container"></div>
+    </section>
+</main>
+
+<style>
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2vmax;
+        justify-content: center;
+        padding: 2vmax;
+    }
+
+    .card {
+        border-radius: 1vmax;
+        box-shadow: 0 0 0.6vmax 0.3vmax var(--font);
+        transition: transform 0.3s ease-in-out;
+        text-align: -webkit-center;
+        padding: 1vmax;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .card img {
+        width: 100%;
+    }
+
+    .card h1,
+    .card h2,
+    .card h3 {
+        margin: 0.25vmax 0;
+    }
+
+    .card h1 {
+        font-size: 2vmax;
+    }
+
+    .card h2 {
+        font-size: 1.35vmax;
+        color: var(--font);
+        text-transform: none;
+
+    }
+
+    .card h3 {
+        font-size: 1vmax;
+        color: var(--font);
+        font-weight: 400;
+    }
+
+    .card h3 a {
+        background-color: transparent;
+        color: var(--secondary);
+    }
+
+    .card h3 a:hover {
+        background-color: transparent;
+    }
+
+    .options {
+        display: flex;
+        gap: 2%;
+    }
+
+    .card a {
+        display: block;
+        width: 100%;
+        font-size: 1vmax;
+        background-color: var(--font);
+        color: white;
+        padding: 0.25vmax;
+        border-radius: 0.25vmax;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    @media (max-width: 1366px) {
+        .card h1 {
+            font-size: 2rem;
+        }
+
+        .card h2 {
+            font-size: 1.35rem;
+
+        }
+
+        .card h3,
+        .card a {
+            font-size: 1rem;
+        }
+    }
+
+    .card a:hover {
+        background-color: var(--secondary);
+    }
+</style>
+
+<script>
+    const users = {{{ json users }}};
+
+    function copy(uniId) {
+        navigator.clipboard.writeText(`تم توثيق:\n${uniId}`);
+    }
+
+    function fetchUsers() {
+        const usersCards = document.querySelector('.cards-container');
+
+        users.forEach(user => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
+            <img src="${user.uniCard}">
+            <h1>${user.name}</h1>
+            <h2>${user.uniId}</h2>
+            <h3><a href="https://wa.me/962${user.phone}" target="_blank">${user.phone}</a></h3>
+            <div class="options" bis_skin_checked="1">
+                <a href="/control-panel/verify-user?id=${user.id}" onclick="copy(${user.uniId})">VERIFY</a>
+                <a href="/control-panel/remove-user?id=${user.id}">REMOVE</a>
+            </div>`;
+
+            usersCards.appendChild(card);
+        });
+    }
+
+    fetchUsers();
+</script>
