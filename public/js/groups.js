@@ -1,5 +1,3 @@
-const { link } = require("../../routes/control-panel");
-
 const groups = [
     {
         name: 'BAU Zarqa',
