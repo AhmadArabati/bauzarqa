@@ -1,3 +1,5 @@
+const { link } = require("../../routes/control-panel");
+
 const groups = [
     {
         name: 'BAU Zarqa',
@@ -103,6 +105,10 @@ const groups = [
         name: 'طحالب فصل ثاني',
         link: 'https://chat.whatsapp.com/FLsuOFmU6EV7aMC3rT07P9'
     },
+    {
+        name: 'Physiology (بيو+مايكرو)',
+        link: 'https://chat.whatsapp.com/CNKiHNqfSO9JZWFFx8iOad'
+    }
     // {
     //     name: 'BAU Zarqa',
     //     link: 'https://chat.whatsapp.com/L4KJ6jiyKN0IPH3lT2pCmO'
