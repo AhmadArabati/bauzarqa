@@ -129,6 +129,10 @@ const groups = [
         name: 'Anatomy (dr.Saddam Al-Khalayleh)',
         link: 'https://chat.whatsapp.com/LbOrue1uPxg4GwsfioOmmQ'
     },
+    {
+        name: 'شعبة عملي و نظري',
+        link: 'https://chat.whatsapp.com/C1EX9ug2BWE62oq2aI7P7k'
+    }
     // {
     //     name: 'BAU Zarqa',
     //     link: 'https://chat.whatsapp.com/L4KJ6jiyKN0IPH3lT2pCmO'
