@@ -106,7 +106,29 @@ const groups = [
     {
         name: 'Physiology (بيو+مايكرو)',
         link: 'https://chat.whatsapp.com/CNKiHNqfSO9JZWFFx8iOad'
-    }
+    },
+    {
+        name: 'الكيمياء الحيوية العامة عملي//بكالوريوس د. ريما طه',
+        link: 'https://chat.whatsapp.com/K5j0ZCJgI1GEdnl3MNpOht',
+        image: 'الكيمياء الحيوية العامة عملي بكالوريوس د. ريما طه'
+    },
+    {
+        name: 'اضطرابات سلوكية وانفعاليه دكتوره اسراء',
+        link: 'https://chat.whatsapp.com/EWgBhPKi9yE63WjE0SpV09'
+    },
+    {
+        name: 'تنميه مهارات حياتية دكتوره اسلام',
+        link: 'https://chat.whatsapp.com/Bg6jU3HcxUc29y64acbN4w'
+    },
+    {
+        name: 'المواطنة الإيجابية || شعبة 3',
+        link: 'https://chat.whatsapp.com/B82KT4yQcBsHR1Emo6ZIoM',
+        image: 'المواطنة الإيجابية شعبة 3'
+    },
+    {
+        name: 'Anatomy (dr.Saddam Al-Khalayleh)',
+        link: 'https://chat.whatsapp.com/LbOrue1uPxg4GwsfioOmmQ'
+    },
     // {
     //     name: 'BAU Zarqa',
     //     link: 'https://chat.whatsapp.com/L4KJ6jiyKN0IPH3lT2pCmO'
