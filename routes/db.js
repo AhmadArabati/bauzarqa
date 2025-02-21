@@ -141,7 +141,8 @@ router.post('/user/sign-in', loggedOut, async (req, res) => {
 
     try {
         const userRef = db.collection('users')
-            .where('uniId', '==', uniId);
+            .where('uniId', '==', uniId)
+            .limit(1);
 
         const userSnapshot = await userRef.get();
 
@@ -437,7 +438,7 @@ router.post("/add-group", loggedIn, async (req, res) => {
         const groupId = match[1];
 
         const groupsRef = db.collection("groups");
-        const existingGroupSnapshot = await groupsRef.where("link", "==", groupId).get();
+        const existingGroupSnapshot = await groupsRef.where("link", "==", groupId).limit(1).get();
 
         if (!existingGroupSnapshot.empty) {
             return throwError(req, res, `This group link already exists!`, '/services/whatsapp-groups/#error');
