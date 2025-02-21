@@ -455,6 +455,23 @@ router.post("/add-group", loggedIn, async (req, res) => {
             createdAt: admin.firestore.FieldValue.serverTimestamp(),
         });
 
+        const userDoc = userSnapshot.docs[0];
+        const userRef = userDoc.ref;
+
+        const userData = userDoc.data();
+        const credited = userData.credited || [];
+
+        if (!credited.includes(newQuestionRef.id)) {
+            let newCredits = (userData.credits || 0) + 1;
+
+            await userRef.update({
+                credits: newCredits,
+                credited: [...credited, newQuestionRef.id]
+            });
+
+            req.session.user.credits = newCredits;
+        }
+
         return throwError(req, res, `Group added successfully!`, '/services/whatsapp-groups/#error');
     } catch (error) {
         console.error("Error adding group:", error);

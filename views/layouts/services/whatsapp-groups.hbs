@@ -232,6 +232,9 @@
                     <a onclick="copy('https://chat.whatsapp.com/${group.link}')"><i class="fa-solid fa-copy"></i></a>
                 </div>`;
 
+                card.onclick = () => {
+                    console.log(group.id);
+                }
                 groupsCards.appendChild(card);
             });
         } catch (error) { }
