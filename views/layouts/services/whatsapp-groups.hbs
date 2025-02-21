@@ -13,7 +13,8 @@
                 <input type="text" id="groupLink" name="link" rows="4" placeholder="رابط القروب" required>
             </label>
 
-            <input type="text" id="uniId" name="uniId" maxlength="11" value="{{user.uniId}}" required style="display: none;">
+            <input type="text" id="uniId" name="uniId" maxlength="11" value="{{user.uniId}}" required
+                style="display: none;">
 
             <button type="submit">Publish</button>
         </form>
@@ -26,6 +27,7 @@
         <br>
         {{/if}}
 
+        <input type="text" id="searchInput" oninput="filterResults()" placeholder="البحث عن اسم قروب">
         <hr>
     </section>
 
@@ -184,7 +186,18 @@
     }
 </style>
 
-<script src="/js/groups.js"></script>
+<style>
+    #searchInput {
+        width: 100%;
+        font-size: 1vmax;
+        padding: 0.25vmax;
+        border: none;
+        outline: none;
+        border-radius: 0.25vmax;
+        color: var(--secondary);
+        direction: rtl;
+    }
+</style>
 
 <script>
     const user = {{{ json user }}};
@@ -204,6 +217,7 @@
         try {
             const response = await fetch("/db/get-groups");
             const groups = await response.json();
+            console.log(groups.length)
 
             groupsCards.innerHTML = '';
 
@@ -224,4 +238,16 @@
     }
 
     fetchGroups();
+</script>
+
+<script>
+    function filterResults() {
+        let input = document.getElementById("searchInput").value.toLowerCase();
+        let cards = document.querySelectorAll(".card");
+
+        cards.forEach(card => {
+            let name = card.querySelector("h3").textContent.toLowerCase();
+            card.style.display = name.includes(input) ? "block" : "none";
+        });
+    }
 </script>
