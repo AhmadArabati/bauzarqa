@@ -782,6 +782,7 @@
         function make_book() {
             const controlPanel = document.querySelector('.control-panel');
             controlPanel.classList.add('none');
+            majorContainer.style.transform = 'scale(1)'
 
             const removeBtns = document.querySelectorAll('.remove-btn');
             removeBtns.forEach(btn => {
@@ -807,6 +808,7 @@
                     removeBtns.forEach(btn => {
                         btn.classList.remove('none');
                     })
+                    scale();
                 })
         }
     </script>

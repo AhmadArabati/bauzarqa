@@ -470,6 +470,7 @@
         // make
         function make_cv() {
             document.querySelector('.control').classList.add('none');
+            cvContainer.style.transform = 'scale(1)';
             fetch('/db/make-cv', {
                 method: "POST",
                 headers: {
@@ -486,6 +487,7 @@
                     }
 
                     document.querySelector('.control').classList.remove('none');
+                    scale();
                 })
         }
     </script>
