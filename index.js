@@ -47,6 +47,12 @@ wss.on("connection", (ws) => {
                 return ws.send(JSON.stringify({ error: "Invalid user data" }));
             }
 
+            const questionRef = db.collection("questions").doc(chatId);
+            const questionDoc = await questionRef.get();
+            if (!questionDoc.exists) {
+                return ws.send(JSON.stringify({ error: "Invalid chatId!" }));
+            }
+
             const userQuery = await db.collection("users")
                 .where("name", "==", user.name)
                 .where("uniId", "==", user.uniId)
@@ -68,13 +74,14 @@ wss.on("connection", (ws) => {
             const credited = userData.credited || [];
 
             if (!credited.includes(chatId)) {
+                let newCredits = (userData.credits || 0) + 3;
+
                 await userRef.update({
-                    credits: (userData.credits || 0) + 3,
+                    credits: newCredits,
                     credited: [...credited, chatId]
                 });
             }
 
-            // Store message in the chat collection
             const chatRef = db.collection("chats").doc(chatId).collection("messages").doc();
             await chatRef.set({
                 id: chatRef.id,

@@ -216,10 +216,14 @@ router.post("/add-book", loggedIn, async (req, res) => {
         const credited = userData.credited || [];
 
         if (!credited.includes(newBookRef.id)) {
+            let newCredits = (userData.credits || 0) + 5;
+
             await userRef.update({
-                credits: (userData.credits || 0) + 5,
+                credits: newCredits,
                 credited: [...credited, newBookRef.id]
             });
+
+            req.session.user.credits = newCredits;
         }
 
         return throwError(req, res, `Book added successfully!`, '/services/book-exchange/#error');
@@ -342,10 +346,14 @@ router.post("/add-question", loggedIn, async (req, res) => {
         const credited = userData.credited || [];
 
         if (!credited.includes(newQuestionRef.id)) {
+            let newCredits = (userData.credits || 0) + 2;
+
             await userRef.update({
-                credits: (userData.credits || 0) + 2,
+                credits: newCredits,
                 credited: [...credited, newQuestionRef.id]
             });
+
+            req.session.user.credits = newCredits;
         }
 
         return throwError(req, res, `Question added successfully!`, '/services/ask-and-answer/#error');
@@ -461,12 +469,12 @@ router.post("/add-group", loggedIn, async (req, res) => {
         const userData = userDoc.data();
         const credited = userData.credited || [];
 
-        if (!credited.includes(newQuestionRef.id)) {
+        if (!credited.includes(newGroupRef.id)) {
             let newCredits = (userData.credits || 0) + 1;
 
             await userRef.update({
                 credits: newCredits,
-                credited: [...credited, newQuestionRef.id]
+                credited: [...credited, newGroupRef.id]
             });
 
             req.session.user.credits = newCredits;
