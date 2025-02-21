@@ -57,6 +57,11 @@ router.get('/user/sign-out', loggedIn, (req, res) => {
     });
 });
 
+router.get('/user/profile', loggedIn, (req, res) => {
+    const user = req.session.user;
+    res.render('user/profile', { title: '- Profile', user });
+});
+
 router.get('/services', (req, res) => {
     res.redirect('/#our-services');
 });
@@ -101,8 +106,9 @@ router.get("/services/ask-and-answer/:questionId", loggedIn, async (req, res) =>
 });
 
 router.get('/services/whatsapp-groups', loggedIn, (req, res) => {
+    const error = req.flash('error');
     const user = req.session.user;
-    res.render('services/whatsapp-groups', { title: '- Whatsapp Gropus', user });
+    res.render('services/whatsapp-groups', { title: '- Whatsapp Gropus', user, error });
 });
 
 router.get('/services/cv-maker', loggedIn, (req, res) => {

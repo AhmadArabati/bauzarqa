@@ -1,7 +1,31 @@
 <main>
-    <section class="section">
+    <section class="section add-group">
         <h2>Whatsapp Groups</h2>
         <br>
+        <form id="groupForm" method="POST" action="/db/add-group">
+            <label>
+                <strong>Name</strong>
+                <input type="text" id="groupName" name="name" placeholder="اسم القروب" required>
+            </label>
+
+            <label>
+                <strong>Link</strong>
+                <input type="text" id="groupLink" name="link" rows="4" placeholder="رابط القروب" required>
+            </label>
+
+            <input type="text" id="uniId" name="uniId" maxlength="11" value="{{user.uniId}}" required style="display: none;">
+
+            <button type="submit">Publish</button>
+        </form>
+        <br><br>
+
+        {{#if error}}
+        <div class="alert alert-warning" role="alert">
+            {{error}}
+        </div>
+        <br>
+        {{/if}}
+
         <hr>
     </section>
 
@@ -11,6 +35,66 @@
 </main>
 
 <style>
+    .add-group {
+        text-align: -webkit-center;
+    }
+
+    form {
+        width: 80%;
+    }
+
+    form label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1vmax;
+        align-items: center;
+        margin-bottom: 3vh;
+    }
+
+    form label select,
+    form label input {
+        padding: 0.7vmax;
+        width: 65%;
+        border: 0.1vmax var(--secondary) solid;
+        border-radius: 0.25vmax;
+        font-size: 0.8vmax;
+    }
+
+    form button {
+        width: 100%;
+        font-size: 1vmax;
+        padding: 0.25vmax;
+        border: none;
+        border-radius: 0.25vmax;
+        background-color: var(--secondary);
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    form button:hover {
+        opacity: 0.8;
+    }
+
+    form button:active {
+        scale: 0.95;
+    }
+
+    @media (max-width: 1366px) {
+        form label {
+            font-size: 1rem;
+        }
+
+        form label select,
+        form label input {
+            font-size: 0.8rem;
+        }
+
+        form button {
+            font-size: 1rem;
+        }
+    }
+
     .cards-container {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -101,46 +185,42 @@
 </style>
 
 <script src="/js/groups.js"></script>
+
 <script>
+    const user = {{{ json user }}};
+
     async function copy(link) {
         try {
             await navigator.clipboard.writeText(link);
             alert("Link copied to clipboard!");
         } catch (err) {
-            console.error("Failed to copy: ", err);
-            alert("Failed to copy link. Please copy manually.");
+            alert("Failed to copy link. Please try again.");
         }
     }
 
-    function fetchGroups() {
+    async function fetchGroups() {
         const groupsCards = document.querySelector('.cards-container');
 
-        groups.forEach(group => {
-            const card = document.createElement("div");
-            card.className = "card";
+        try {
+            const response = await fetch("/db/get-groups");
+            const groups = await response.json();
 
-            const img = document.createElement("img");
-            let imgSrc = `/images/groups/${group.name}.png`;
+            groupsCards.innerHTML = '';
 
-            img.onerror = () => {
-                img.onerror = () => {
-                    img.src = "/images/whatsapp-groups.png";
-                };
-                img.src = `/images/groups/${group.image}.png`;
-            };
+            groups.forEach((group) => {
+                const card = document.createElement("div");
+                card.className = "card";
+                card.innerHTML = `
+                <img src="${group.image}">
+                <h3>${group.name}</h3>
+                <div class="options" bis_skin_checked="1">
+                    <a href="https://chat.whatsapp.com/${group.link}" target="_blank"><i class="fa-solid fa-link"></i></a>
+                    <a onclick="copy('https://chat.whatsapp.com/${group.link}')"><i class="fa-solid fa-copy"></i></a>
+                </div>`;
 
-            img.src = imgSrc;
-
-            card.innerHTML = `
-            <h3>${group.name}</h3>
-            <div class="options" bis_skin_checked="1">
-                <a href="${group.link}" target="_blank"><i class="fa-solid fa-link"></i></a>
-                <a onclick="copy('${group.link}')"><i class="fa-solid fa-copy"></i></a>
-            </div>`;
-
-            card.insertBefore(img, card.firstChild);
-            groupsCards.appendChild(card);
-        });
+                groupsCards.appendChild(card);
+            });
+        } catch (error) { }
     }
 
     fetchGroups();

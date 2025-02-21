@@ -7,23 +7,6 @@ const puppeteer = require("puppeteer");
 const fs = require("fs");
 const path = require("path");
 
-async function hashPassword() {
-    const password = '';
-    const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
-}
-
-// hashPassword();
-
-async function name() {
-    const booksSnapshot = await db.collection("users").orderBy("createdAt", "desc").get();
-    const books = booksSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-    console.log(books);
-}
-
-// name();
-
 cloudinary.config({
     cloud_name: 'dguwmbpb1',
     api_key: '414471397375342',
@@ -35,6 +18,23 @@ const db = admin.firestore();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
 
 const router = express.Router();
+
+async function hashPassword() {
+    const password = '';
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log(hashedPassword);
+}
+
+// hashPassword();
+
+async function getUsers() {
+    const usersSnapshot = await db.collection("users").orderBy("createdAt", "desc").get();
+    const users = usersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+    console.log(users);
+}
+
+// getUsers();
 
 const loggedOut = (req, res, next) => {
     if (req.session.user) {
@@ -165,10 +165,10 @@ router.post('/user/sign-in', loggedOut, async (req, res) => {
             name: userData.name,
             uniId: userData.uniId,
             phone: userData.phone,
-            uniCard: userData.uniCard,
+            credits: userData.credits,
         };
 
-        res.redirect('/');
+        res.redirect('/user/profile');
     } catch (error) {
         console.error('Error signing in user:', error);
         return throwError(req, res, `Something went wrong!`, '/user/sign-in/#error');
@@ -177,11 +177,22 @@ router.post('/user/sign-in', loggedOut, async (req, res) => {
 
 router.post("/add-book", loggedIn, async (req, res) => {
     const user = req.session.user;
+
     try {
         const { type, title, description, price } = req.body;
 
         if (!type || (type !== 'Free' && type !== 'Paid') || !title || title.length > 20 || !description || description.length > 60 || !price || (type === 'Paid' && (Number(price) <= 0 || Number(price) > 100 || isNaN(Number(price))))) {
             return throwError(req, res, `Something went wrong!`, '/services/book-exchange/#error');
+        }
+
+        const usersRef = db.collection("users");
+        const userSnapshot = await usersRef
+            .where("uniId", "==", user.uniId)
+            .limit(1)
+            .get();
+
+        if (userSnapshot.empty) {
+            return throwError(req, res, `User not found!`, '/services/book-exchange/#error');
         }
 
         const newBookRef = db.collection("books").doc();
@@ -197,6 +208,19 @@ router.post("/add-book", loggedIn, async (req, res) => {
             createdAt: admin.firestore.FieldValue.serverTimestamp(),
             done: false
         });
+
+        const userDoc = userSnapshot.docs[0];
+        const userRef = userDoc.ref;
+
+        const userData = userDoc.data();
+        const credited = userData.credited || [];
+
+        if (!credited.includes(newBookRef.id)) {
+            await userRef.update({
+                credits: (userData.credits || 0) + 5,
+                credited: [...credited, newBookRef.id]
+            });
+        }
 
         return throwError(req, res, `Book added successfully!`, '/services/book-exchange/#error');
     } catch (error) {
@@ -281,11 +305,22 @@ router.post("/done-book", loggedIn, async (req, res) => {
 
 router.post("/add-question", loggedIn, async (req, res) => {
     const user = req.session.user;
+
     try {
         const { name, title, description } = req.body;
 
         if (!name || (name !== user.name && name !== 'Anonymous') || !title || title.length > 20 || !description || description.length > 60) {
             return throwError(req, res, `Something went wrong!`, '/services/ask-and-answer/#error');
+        }
+
+        const usersRef = db.collection("users");
+        const userSnapshot = await usersRef
+            .where("uniId", "==", user.uniId)
+            .limit(1)
+            .get();
+
+        if (userSnapshot.empty) {
+            return throwError(req, res, `User not found!`, '/services/ask-and-answer/#error');
         }
 
         const newQuestionRef = db.collection("questions").doc();
@@ -299,6 +334,19 @@ router.post("/add-question", loggedIn, async (req, res) => {
             createdAt: admin.firestore.FieldValue.serverTimestamp(),
             done: false
         });
+
+        const userDoc = userSnapshot.docs[0];
+        const userRef = userDoc.ref;
+
+        const userData = userDoc.data();
+        const credited = userData.credited || [];
+
+        if (!credited.includes(newQuestionRef.id)) {
+            await userRef.update({
+                credits: (userData.credits || 0) + 2,
+                credited: [...credited, newQuestionRef.id]
+            });
+        }
 
         return throwError(req, res, `Question added successfully!`, '/services/ask-and-answer/#error');
     } catch (error) {
@@ -361,6 +409,68 @@ router.get("/get-chat", loggedIn, async (req, res) => {
     } catch (error) {
         console.error("Error fetching chat:", error);
         return res.status(500).json({ error: "Failed to fetch chat messages" });
+    }
+});
+
+router.post("/add-group", loggedIn, async (req, res) => {
+    const user = req.session.user;
+
+    try {
+        const { name, link, uniId } = req.body;
+
+        if (!name || !link || !uniId) {
+            return throwError(req, res, `Name, link, and university ID are required!`, '/services/whatsapp-groups/#error');
+        }
+
+        const match = link.match(/(?:https?:\/\/)?(?:www\.)?chat\.whatsapp\.com\/([A-Za-z0-9_-]+)/);
+        if (!match) {
+            return throwError(req, res, `Invalid group link!`, '/services/whatsapp-groups/#error');
+        }
+        const groupId = match[1];
+
+        const groupsRef = db.collection("groups");
+        const existingGroupSnapshot = await groupsRef.where("link", "==", groupId).get();
+
+        if (!existingGroupSnapshot.empty) {
+            return throwError(req, res, `This group link already exists!`, '/services/whatsapp-groups/#error');
+        }
+
+        const usersRef = db.collection("users");
+        const userSnapshot = await usersRef
+            .where("uniId", "==", user.uniId)
+            .limit(1)
+            .get();
+
+        if (userSnapshot.empty || uniId !== user.uniId) {
+            return throwError(req, res, `Something went wrong!`, '/services/whatsapp-groups/#error');
+        }
+
+        const newGroupRef = db.collection("groups").doc();
+        await newGroupRef.set({
+            id: newGroupRef.id,
+            uid: user.uniId,
+            name,
+            link: groupId,
+            image: '/images/whatsapp-groups.png',
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+
+        return throwError(req, res, `Group added successfully!`, '/services/whatsapp-groups/#error');
+    } catch (error) {
+        console.error("Error adding group:", error);
+        return throwError(req, res, `Something went wrong!`, '/services/whatsapp-groups/#error');
+    }
+});
+
+router.get("/get-groups", loggedIn, async (req, res) => {
+    try {
+        const groupsSnapshot = await db.collection("groups").orderBy("createdAt", "desc").get();
+        const groups = groupsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+        res.status(200).json(groups);
+    } catch (error) {
+        console.error("Error fetching groups:", error);
+        return throwError(req, res, `Error getting groups!`, '/services/whatsapp-groups/#error');
     }
 });
 

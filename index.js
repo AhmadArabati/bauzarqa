@@ -61,10 +61,23 @@ wss.on("connection", (ws) => {
                 return ws.send(JSON.stringify({ error: "Invalid message data" }));
             }
 
-            const chatRef = db.collection("chats").doc(chatId).collection("messages").doc();
+            const userDoc = userQuery.docs[0];
+            const userRef = userDoc.ref;
 
-            // Store message
+            const userData = userDoc.data();
+            const credited = userData.credited || [];
+
+            if (!credited.includes(chatId)) {
+                await userRef.update({
+                    credits: (userData.credits || 0) + 3,
+                    credited: [...credited, chatId]
+                });
+            }
+
+            // Store message in the chat collection
+            const chatRef = db.collection("chats").doc(chatId).collection("messages").doc();
             await chatRef.set({
+                id: chatRef.id,
                 name,
                 message,
                 createdAt: admin.firestore.FieldValue.serverTimestamp(),
