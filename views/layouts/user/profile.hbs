@@ -1,0 +1,157 @@
+<main>
+    <section class="section">
+        <h2>Profile</h2>
+        <br>
+        <hr>
+    </section>
+
+    <section class="section profile">
+        <div class="id">
+            <h2>Student Id</h2>
+            <hr><br>
+            <ul>
+                <li>
+                    <span>Name</span>
+                    <span>{{ user.name }}</span>
+                </li>
+                <li>
+                    <span>Uni ID</span>
+                    <span>{{ user.uniId }}</span>
+                </li>
+                <li>
+                    <span>Phone</span>
+                    <span>{{ user.phone }}</span>
+                </li>
+                <li>
+                    <span>credit</span>
+                    <span>{{#if user.credits}}{{user.credits}}{{else}}0{{/if}} &nbsp; <img src="/images/bau_cur.png" class="bau_cur"></span>
+                </li>
+                <li>
+                    <span>Admin</span>
+                    <span>{{#isAdmin user.uniId}}TRUE{{else}}FALSE{{/isAdmin}}</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="options">
+            {{#isAdmin user.uniId}}<a href="/control-panel/not-verified">Admin</a>{{/isAdmin}}
+            <a href="/user/sign-out">Log Out</a>
+        </div>
+    </section>
+</main>
+
+<style>
+    .profile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .id {
+        width: 90%;
+        max-width: 500px;
+        padding: 3%;
+
+        border-radius: 1vmax;
+        box-shadow: 0.1vmax 0.1vmax 0.5vmax 0.3vmax rgba(0, 0, 0, 0.5);
+    }
+
+    .id h2 {
+        font-weight: 900;
+    }
+
+    .id ul li {
+        display: flex;
+        justify-content: space-between;
+        gap: 5%;
+    }
+
+    .id ul li span {
+        display: flex;
+        align-items: center;
+    }
+
+    .id ul li span:nth-child(1) {
+        font-weight: 900;
+        text-decoration: underline;
+        text-transform: uppercase;
+    }
+
+    .id ul li span:nth-child(2) {
+        font-weight: 700;
+    }
+
+    .bau_cur {
+        max-width: 20px;
+        height: auto;
+        display: block;
+    }
+</style>
+
+<style>
+    .options {
+        display: flex;
+        gap: 2%;
+
+        width: 100%;
+        margin-top: 6%;
+        max-width: 500px;
+        text-align: center;
+    }
+
+    .options a {
+        display: block;
+        width: 100%;
+        font-size: 1vmax;
+        background-color: var(--font);
+        color: white;
+        padding: 0.25vmax;
+        border-radius: 0.25vmax;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .options a:hover {
+        background-color: var(--secondary);
+    }
+
+    .options a:active {
+        scale: 0.95;
+    }
+</style>
+
+<style>
+    @media only screen and (min-width: 768px) {
+        .id {
+            width: 70%;
+            padding: 4%;
+        }
+
+        .options {
+            width: 70%;
+        }
+    }
+
+    @media only screen and (min-width: 1024px) {
+        .id {
+            width: 60%;
+            padding: 3%;
+        }
+
+        .options {
+            width: 60%;
+        }
+    }
+
+    @media only screen and (max-width: 560px) {
+        .options {
+            padding: 0 4%;
+        }
+    }
+
+    @media only screen and (max-width: 1366px) {
+        .options a {
+            font-size: 1.15rem;
+        }
+    }
+</style>

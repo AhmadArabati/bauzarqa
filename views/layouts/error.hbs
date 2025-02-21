@@ -1,3 +1,45 @@
-<h1>{{message}}</h1>
+<header class="header">
+    <nav>
+        <div class="logo">
+            <a href="/"><img src="/images/marka_white.png">BAU&nbsp;<span>Zarqa</span></a>
+        </div>
+        <input type="checkbox" id="menu-toggle">
+        <label for="menu-toggle" class="menu-icon">&#9776;</label>
+        <ul class="menu">
+            <li><a href="/#our-services">Our Services</a></li>
+            <li><a href="/#our-location">Our Location</a></li>
+            <li><a href="/#about-us">About Us</a></li>
+            <li><a href="#contact-us">Contact Us</a></li>
+            {{#if user}}
+            <li><a href="#{{user.name}}">{{user.name}}</a></li>
+            <li><a href="/user/sign-out">Log Out</a></li>
+            {{else}}
+            <li><a href="/user/sign-up">Join Us</a></li>
+            {{/if}}
+        </ul>
+    </nav>
+</header>
+
+
+<footer>
+    <div id="contact-us">
+        <a href="tel:+962785330572" target="_blank"><i class="fa-solid fa-phone"></i></a>
+        <a href="mailto:sirarabati@gmail.com" target="_blank"><i class="fa-solid fa-envelope"></i></a>
+        <a href="https://maps.app.goo.gl/TQ4ttF9uUdZEBKWK9" target="_blank"><i class="fa-solid fa-location-dot"></i></a>
+        <a href="https://chat.whatsapp.com/L4KJ6jiyKN0IPH3lT2pCmO" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+    </div>
+    <br>
+    <div>
+        <a href="/privacy-policy">Privacy Policy</a>
+        <br>
+        <a href="#all-rights-reserved-arabati">All rights reserved 2025 &copy; Arabati</a>
+    </div>
+</footer>
+
+<button id="go-to-top">
+    <i class="fas fa-chevron-up"></i>
+</button>
+
+{{!-- <h1>{{message}}</h1>
 <h2>{{error.status}}</h2>
-<pre>{{error.stack}}</pre>
+<pre>{{error.stack}}</pre> --}}

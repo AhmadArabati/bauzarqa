@@ -15,7 +15,7 @@
 
 <body>
 
-    <div class="cv-container">
+    <div class="cv-container" contenteditable="true">
         <section>
             <img id="cv_img">
 
@@ -179,7 +179,7 @@
                 </div>
             </div>
 
-            <div class="control-panel">
+            <div class="control-panel" contenteditable="false">
                 <div class="control">
                     <input type="file" id="imgSrc" accept="image/*" oninput="handleImageInput(event)">
                     <div id="crop-container" class="none">
@@ -408,8 +408,6 @@
 
     <script>
         const cvContainer = document.querySelector('.cv-container');
-        cvContainer.contentEditable = 'true';
-        document.querySelector('.control').contentEditable = 'false';
 
         // resize
         function resize() {
@@ -484,14 +482,11 @@
                 .then(res => res.json())
                 .then(data => {
                     if (data.pdfUrl) {
-                        window.location.href = data.pdfUrl;
-                    } else {
-                        console.error("Error:", data.error);
+                        open(data.pdfUrl);
                     }
 
                     document.querySelector('.control').classList.remove('none');
                 })
-                .catch(error => console.error("Error:", error));
         }
     </script>
 
@@ -509,10 +504,6 @@
 
         dbRequest.onsuccess = function (event) {
             const db = event.target.result;
-        };
-
-        dbRequest.onerror = function (event) {
-            console.error("Error opening IndexedDB:", event.target.error);
         };
 
         // handle image
@@ -567,13 +558,6 @@
                 };
 
                 store.put(cvRecord);
-                transaction.oncomplete = function () {
-                    console.log("CV content saved to IndexedDB.");
-                };
-            };
-
-            dbRequest.onerror = function (event) {
-                console.error("Error saving CV content to IndexedDB:", event.target.error);
             };
         }
 
@@ -591,14 +575,8 @@
                     const cv = request.result;
                     if (cv) {
                         cvContainer.innerHTML = cv.data;
-                    } else {
-                        console.log("No CV found in IndexedDB.");
                     }
                 };
-            };
-
-            dbRequest.onerror = function (event) {
-                console.error("Error retrieving CV from IndexedDB:", event.target.error);
             };
         }
 
@@ -612,18 +590,6 @@
                 const store = transaction.objectStore("cv");
 
                 const request = store.delete("content");
-
-                request.onsuccess = function () {
-                    console.log("CV content removed from IndexedDB.");
-                };
-
-                request.onerror = function (event) {
-                    console.error("Error removing CV content from IndexedDB:", event.target.error);
-                };
-            };
-
-            dbRequest.onerror = function (event) {
-                console.error("Error opening IndexedDB:", event.target.error);
             };
         }
     </script>

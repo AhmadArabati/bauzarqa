@@ -6,15 +6,14 @@
         <input type="checkbox" id="menu-toggle">
         <label for="menu-toggle" class="menu-icon">&#9776;</label>
         <ul class="menu">
-            <li><a href="/#our-services">Our Services</a></li>
-            <li><a href="/#our-location">Our Location</a></li>
-            <li><a href="/#about-us">About Us</a></li>
-            <li><a href="#contact-us">Contact Us</a></li>
+            <li><a href="/#our-services">Services</a></li>
+            <li><a href="/#our-college">College</a></li>
+            <li><a href="/#about-us">About</a></li>
+            <li><a href="#contact-us">Contact</a></li>
             {{#if user}}
-            <li><a href="#{{user.name}}">{{user.name}}</a></li>
-            <li><a href="/user/sign-out">Log Out</a></li>
+            <li><a href="/user/profile">Profile</a></li>
             {{else}}
-            <li><a href="/user/sign-up">Join Us</a></li>
+            <li><a href="/user/sign-up">Join</a></li>
             {{/if}}
         </ul>
     </nav>

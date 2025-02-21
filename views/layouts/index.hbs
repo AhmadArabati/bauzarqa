@@ -14,18 +14,32 @@
 </section>
 
 <main>
+    <section id="explanation" class="section">
+        <h2>Explanation</h2>
+        <iframe height="450" src="https://www.youtube.com/embed/US-jGScsWtA?si=esAzDmHBiIU9-CRA"
+            title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </section>
+
     <section id="our-services" class="section">
         <h2>Our Services</h2>
         <p><strong>Some questions you might have:</strong></p>
         <p><em>What services do you provide?</em></p>
         <ul>
-            <li><strong>Book Exchange:</strong> Easily sell, buy, give or exchange books with other students. Simplify
-                your
-                academic journey!</li>
-            <li><strong>Summaries:</strong> Access high-quality, well-organized summaries to save time and study more
-                effectively.</li>
-            <li><strong>Question Bank:</strong> Browse a curated bank of past and potential exam questions to help you
-                prepare with confidence.</li>
+            <li><strong>Book Exchange:</strong> Easily sell, buy, donate, or exchange books with other students.
+                Simplify your academic journey!</li>
+            <li><strong>Question Bank (Coming Soon):</strong> Access a curated collection of past exam questions and
+                potential future questions to help you prepare with confidence.</li>
+            <li><strong>Grades Calculator:</strong> Quickly calculate your current or expected GPA.</li>
+            <li><strong>Ask & Answer:</strong> Have an academic question or problem? Ask the community and get answers
+                from students and experts, or contribute by answering questions you know.</li>
+            <li><strong>WhatsApp Groups:</strong> Find and join relevant WhatsApp groups to enhance your learning
+                experience and stay connected with your peers.</li>
+            <li><strong>CV Maker:</strong> Create a professional CV quickly and easily. Get free CV editing assistance
+                and download it as a PDF.</li>
+            <li><strong>Field Training:</strong> Record and save all the valuable information from your field training,
+                then generate a full PDF book with your training details.</li>
         </ul>
         <br>
         <p><em>What about the prices?</em></p>
@@ -65,11 +79,16 @@
                 <h3>CV MAKER</h3>
                 <a href="/services/cv-maker"><i class="fa-solid fa-link"></i> OPEN</a>
             </div>
+            <div class="card field-training">
+                <img src="/images/field-training.png">
+                <h3>FIELD TRAINING</h3>
+                <a href="/services/field-training"><i class="fa-solid fa-link"></i> OPEN</a>
+            </div>
         </div>
     </section>
 
-    <section id="our-location" class="section">
-        <h2>Our Location</h2>
+    <section id="our-college" class="section">
+        <h2>Our College</h2>
         <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3381.6007798838937!2d36.0926648!3d32.0529957!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151b6fd280a9c80d%3A0x490bdd2869686758!2z2KzYp9mF2LnYqSDYp9mE2KjZhNmC2KfYoSDYp9mE2KrYt9io2YrZgtmK2Kkv2YPZhNmK2Kkg2KfZhNiy2LHZgtin2KEg2KfZhNis2KfZhdi52YrYqQ!5e0!3m2!1sen!2sjo!4v1738184563574!5m2!1sen!2sjo"
             height="450" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
@@ -90,6 +109,7 @@
             <li>A professional football player and former player at Al-Faisaly and Al-Rusaifa clubs.</li>
             <li>A chess player and I already won some awards for it at the city level.</li>
             <li>I enjoy solving puzzles in general, problem solving, Rubik's Cube, etc...</li>
+            <li>I'm a professional gamer and I have a long history in the gaming field.</li>
         </ul>
     </section>
 
@@ -177,6 +197,11 @@
         transition: transform 0.3s ease-in-out;
         text-align: -webkit-center;
         padding: 1vmax;
+    }
+
+    .field-training {
+        width: calc(200% + 2vmax) !important;
+        max-width: none;
     }
 
     .card:hover {
