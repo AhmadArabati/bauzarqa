@@ -107,8 +107,9 @@ router.get("/services/ask-and-answer/:questionId", loggedIn, async (req, res) =>
 
 router.get('/services/whatsapp-groups', loggedIn, (req, res) => {
     const error = req.flash('error');
+    const add = req.flash('add');
     const user = req.session.user;
-    res.render('services/whatsapp-groups', { title: '- Whatsapp Gropus', user, error });
+    res.render('services/whatsapp-groups', { title: '- Whatsapp Gropus', user, error, add });
 });
 
 router.get('/services/cv-maker', loggedIn, (req, res) => {
@@ -134,13 +135,18 @@ router.get('/services/field-training/:major', loggedIn, (req, res) => {
     ];
 
     if (majors.includes(major)) {
-        res.sendFile(path.join(__dirname, '..', 'views', 'layouts', 'services', 'field-training', 'majors.html'));
+        res.sendFile(path.join(__dirname, '..', 'views', 'layouts', 'services', 'majors.html'));
     } else {
         res.redirect('./');
     }
 });
 
-router.get('/sitemap', (req, res) => {
+// router.get('/services/employment', loggedIn, (req, res) => {
+//     const user = req.session.user;
+//     res.render('services/employment', { title: '- Employment', user });
+// });
+
+router.get('/urlset.xml', (req, res) => {
     res.header('Content-Type', 'application/xml');
 
     const home = 'https://bauzarqa.onrender.com/';

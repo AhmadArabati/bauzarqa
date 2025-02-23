@@ -141,7 +141,8 @@ router.post('/user/sign-in', loggedOut, async (req, res) => {
 
     try {
         const userRef = db.collection('users')
-            .where('uniId', '==', uniId);
+            .where('uniId', '==', uniId)
+            .limit(1);
 
         const userSnapshot = await userRef.get();
 
@@ -216,10 +217,14 @@ router.post("/add-book", loggedIn, async (req, res) => {
         const credited = userData.credited || [];
 
         if (!credited.includes(newBookRef.id)) {
+            let newCredits = (userData.credits || 0) + 5;
+
             await userRef.update({
-                credits: (userData.credits || 0) + 5,
+                credits: newCredits,
                 credited: [...credited, newBookRef.id]
             });
+
+            req.session.user.credits = newCredits;
         }
 
         return throwError(req, res, `Book added successfully!`, '/services/book-exchange/#error');
@@ -342,10 +347,14 @@ router.post("/add-question", loggedIn, async (req, res) => {
         const credited = userData.credited || [];
 
         if (!credited.includes(newQuestionRef.id)) {
+            let newCredits = (userData.credits || 0) + 2;
+
             await userRef.update({
-                credits: (userData.credits || 0) + 2,
+                credits: newCredits,
                 credited: [...credited, newQuestionRef.id]
             });
+
+            req.session.user.credits = newCredits;
         }
 
         return throwError(req, res, `Question added successfully!`, '/services/ask-and-answer/#error');
@@ -429,10 +438,10 @@ router.post("/add-group", loggedIn, async (req, res) => {
         const groupId = match[1];
 
         const groupsRef = db.collection("groups");
-        const existingGroupSnapshot = await groupsRef.where("link", "==", groupId).get();
+        const existingGroupSnapshot = await groupsRef.where("link", "==", groupId).limit(1).get();
 
         if (!existingGroupSnapshot.empty) {
-            return throwError(req, res, `This group link already exists!`, '/services/whatsapp-groups/#error');
+            return throwError(req, res, `Group already exists!`, '/services/whatsapp-groups/#error');
         }
 
         const usersRef = db.collection("users");
@@ -455,7 +464,24 @@ router.post("/add-group", loggedIn, async (req, res) => {
             createdAt: admin.firestore.FieldValue.serverTimestamp(),
         });
 
-        return throwError(req, res, `Group added successfully!`, '/services/whatsapp-groups/#error');
+        const userDoc = userSnapshot.docs[0];
+        const userRef = userDoc.ref;
+
+        const userData = userDoc.data();
+        const credited = userData.credited || [];
+
+        if (!credited.includes(newGroupRef.id)) {
+            let newCredits = (userData.credits || 0) + 1;
+
+            await userRef.update({
+                credits: newCredits,
+                credited: [...credited, newGroupRef.id]
+            });
+
+            req.session.user.credits = newCredits;
+        }
+
+        return throwError(req, res, `Group added successfully!`, '/services/whatsapp-groups/#error', true);
     } catch (error) {
         console.error("Error adding group:", error);
         return throwError(req, res, `Something went wrong!`, '/services/whatsapp-groups/#error');

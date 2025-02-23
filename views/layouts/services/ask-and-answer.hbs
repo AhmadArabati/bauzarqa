@@ -274,11 +274,11 @@
                 if (user.uniId === question.uid) {
                     if (question.done) {
                         ownCard = `
-                        <a onclick="alert('This question is over!');"><i class="fa-solid fa-square-check"></i></a>
+                        <a onclick="alert('This question is over!');"><i class="fa-solid fa-thumbs-up"></i></a>
                         <a onclick="alert('This question is over!');"><i class="fa-solid fa-comment-dots"></i></a>`;
                     } else {
                         ownCard = `
-                        <a onclick="doneaquestion('${user.uniId}', '${question.uid}', '${question.id}');"><i class="fa-solid fa-square-check"></i></a>
+                        <a onclick="doneaquestion('${user.uniId}', '${question.uid}', '${question.id}');"><i class="fa-solid fa-thumbs-up"></i></a>
                         <a href="/services/ask-and-answer/${question.id}"><i class="fa-solid fa-comment-dots"></i></a>`;
                     }
                 } else {
