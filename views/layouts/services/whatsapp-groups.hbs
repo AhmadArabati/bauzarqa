@@ -21,14 +21,18 @@
         <br><br>
 
         {{#if error}}
-        <div class="alert alert-warning" role="alert">
-            {{error}}
-        </div>
-        <br>
-        {{/if}}
+        {{#if add}}
+        <div class="alert alert-success" role="alert">
+            {{else}}
+            <div class="alert alert-warning" role="alert">
+                {{/if}}
+                {{error}}
+            </div>
+            <br>
+            {{/if}}
 
-        <input type="text" id="searchInput" oninput="filterResults()" placeholder="البحث عن اسم قروب">
-        <hr>
+            <input type="text" id="searchInput" oninput="filterResults()" placeholder="البحث عن اسم قروب">
+            <hr>
     </section>
 
     <section class="section groups">
@@ -197,6 +201,12 @@
         color: var(--secondary);
         direction: rtl;
     }
+
+    @media (max-width: 1366px) {
+        #searchInput {
+            font-size: 1rem !important;
+        }
+    }
 </style>
 
 <script>
@@ -227,7 +237,7 @@
                 card.innerHTML = `
                 <img src="${group.image}">
                 <h3>${group.name}</h3>
-                <div class="options" bis_skin_checked="1">
+                <div class="options">
                     <a href="https://chat.whatsapp.com/${group.link}" target="_blank"><i class="fa-solid fa-link"></i></a>
                     <a onclick="copy('https://chat.whatsapp.com/${group.link}')"><i class="fa-solid fa-copy"></i></a>
                 </div>`;

@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BAU Zarqa - Field Training</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://kit.fontawesome.com/173c80e632.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+</head>
+
+<body>
+
+    <div class="major-container">
+        <div class="page">
+            <img class="cover base64">
+            <svg viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg" class="book_img-container">
+                <defs>
+                    <pattern id="img" patternUnits="userSpaceOnUse" width="100" height="100">
+                        <image id="book_img" x="-25" width="150" height="100" />
+                    </pattern>
+                </defs>
+                <polygon points="50 1 95 25 95 75 50 99 5 75 5 25" fill="url(#img)" />
+            </svg>
+        </div>
+
+        <div class="page">
+            <h1 contenteditable="false" class="major-title"></h1>
+
+            <table>
+                <tr>
+                    <th>Color</th>
+                    <th>Additive</th>
+                    <th>Function of Additive</th>
+                    <th>Common Lab Tests</th>
+                </tr>
+                <tr>
+                    <td class="red">Red</td>
+                    <td>None or Clot Activator</td>
+                    <td>Promotes blood clotting</td>
+                    <td>Serum tests, blood chemistry, hormone levels</td>
+                </tr>
+                <tr>
+                    <td class="gold">Gold (SST)</td>
+                    <td>Clot Activator & Gel Separator</td>
+                    <td>Promotes clotting, separates serum</td>
+                    <td>Comprehensive Metabolic Panel (CMP), lipid panel</td>
+                </tr>
+                <tr>
+                    <td class="light-blue">Light Blue</td>
+                    <td>Sodium Citrate</td>
+                    <td>Prevents clotting by binding calcium</td>
+                    <td>Coagulation studies (PT, PTT, INR)</td>
+                </tr>
+                <tr>
+                    <td class="green">Green</td>
+                    <td>Heparin</td>
+                    <td>Inhibits thrombin to prevent clotting</td>
+                    <td>Electrolytes, arterial blood gases (ABGs), chemistry tests</td>
+                </tr>
+                <tr>
+                    <td class="lavender">Lavender</td>
+                    <td>EDTA</td>
+                    <td>Binds calcium to prevent clotting</td>
+                    <td>Complete Blood Count (CBC), blood smear</td>
+                </tr>
+                <tr>
+                    <td class="gray">Gray</td>
+                    <td>Sodium Fluoride & Potassium Oxalate</td>
+                    <td>Inhibits glycolysis, prevents clotting</td>
+                    <td>Glucose testing, lactate levels</td>
+                </tr>
+                <tr>
+                    <td class="yellow">Yellow</td>
+                    <td>Acid-Citrate-Dextrose (ACD) or SPS</td>
+                    <td>Preserves blood cells or prevents bacterial growth</td>
+                    <td>DNA testing, blood cultures</td>
+                </tr>
+                <tr>
+                    <td class="pink">Pink</td>
+                    <td>EDTA</td>
+                    <td>Prevents clotting for blood banking</td>
+                    <td>Blood type and crossmatch</td>
+                </tr>
+                <tr>
+                    <td class="black">Black</td>
+                    <td>Sodium Citrate</td>
+                    <td>Maintains blood-to-additive ratio</td>
+                    <td>Erythrocyte Sedimentation Rate (ESR)</td>
+                </tr>
+                <tr>
+                    <td class="dark-blue">Dark Blue</td>
+                    <td>Trace Element-Free (with or without Heparin)</td>
+                    <td>Prevents trace metal contamination</td>
+                    <td>Heavy metal testing (lead, mercury)</td>
+                </tr>
+            </table>
+
+            <h4 contenteditable="false"><span>bau - zarqa</span> <span>2</span> <span>field training</span></h4>
+        </div>
+
+        <div class="page" style="text-align: center;">
+            <h1 contenteditable="false" class="major-title"></h1>
+
+            <table>
+                <tr>
+                    <th>Anti-Sera</th>
+                    <th>Function</th>
+                    <th>Common Uses</th>
+                </tr>
+                <tr>
+                    <td>Anti-A</td>
+                    <td>Detects A antigen on red blood cells</td>
+                    <td>Blood typing</td>
+                </tr>
+                <tr>
+                    <td>Anti-B</td>
+                    <td>Detects B antigen on red blood cells</td>
+                    <td>Blood typing</td>
+                </tr>
+                <tr>
+                    <td>Anti-D (Rh)</td>
+                    <td>Detects Rh factor (D antigen)</td>
+                    <td>Determining Rh-positive or Rh-negative blood type</td>
+                </tr>
+            </table>
+
+            <br><br><br>
+
+            <img src="/images/anti-sera.png" class="base64">
+
+            <h4 contenteditable="false"><span>bau - zarqa</span> <span>3</span> <span>field training</span></h4>
+        </div>
+
+        <div class="page" contenteditable="true">
+            <button onclick="remove_page(this.parentElement)" class="remove-btn"><i class="fa-solid fa-trash-can"
+                    contenteditable="false"></i></button>
+
+            <h1 contenteditable="false" class="major-title"></h1>
+
+            <div class="flex">
+                <div class="column">
+                    <div class="info">
+                        <div class="title">
+                            <i class="fa-solid fa-info"></i>
+                            <div>
+                                <h2>analysis info</h2>
+                                <hr>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="content">
+                            <ul>
+                                <li><b>analysis name: </b> CBC</li>
+                                <li><b>sample type: </b> Whole Blood</li>
+                                <li><b>used tube: </b> EDTA (lavender)</li>
+                                <li><b>device name: </b> haematology analysers</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="steps">
+                        <div class="title">
+                            <i class="fa-regular fa-file-lines"></i>
+                            <div>
+                                <h2>analysis steps</h2>
+                                <hr>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="content">
+                            <ul>
+                                <li>Collect whole blood sample in an EDTA (lavender) tube.</li>
+                                <li>Gently invert the tube 5-10 times to mix the anticoagulant with the sample.</li>
+                                <li>Load the sample into the haematology analyser.</li>
+                                <li>The analyser aspirates and processes the sample for CBC parameters.</li>
+                                <li>The device measures RBC, WBC, Platelets, Hemoglobin, Hematocrit, etc..</li>
+                                <li>Results are displayed and printed for further evaluation.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="column">
+
+                    <div class="notes">
+                        <div class="title">
+                            <i class="fa-solid fa-list-check"></i>
+                            <div>
+                                <h2>analysis notes</h2>
+                                <hr>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="content">
+                            <ul>
+                                <li>Ensure the sample is properly mixed to prevent clotting.</li>
+                                <li>Avoid hemolysis by using proper venipuncture technique.</li>
+                                <li>If delayed testing, store the sample at 2-8°C but do not freeze.</li>
+                                <li>Lipemic or hemolyzed samples may affect results.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mis-reading">
+                        <div class="title">
+                            <i class="fa-solid fa-xmark"></i>
+                            <div>
+                                <h2>analysis misreading</h2>
+                                <hr>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="content">
+                            <ul>
+                                <li>Clotted samples may cause inaccurate WBC or platelet counts.</li>
+                                <li>Hemolysis can falsely decrease RBC count & Hematocrit.</li>
+                                <li>Excessive EDTA can cause shrunken RBCs, affecting MCV results.</li>
+                                <li>Cold agglutinins may increase MCV and falsely lower RBC count.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <h4 contenteditable="false"><span>bau - zarqa</span> <span class="number">4</span> <span>field
+                    training</span></h4>
+        </div>
+
+        <div class="page">
+            <img src="/images/majors/covers/back-cover.png" class="back-cover base64">
+        </div>
+
+        <div class="control-panel">
+            <div class="control">
+                <input type="file" id="imgSrc" accept="image/*" oninput="handleImageInput(event)">
+                <div id="crop-container" class="none">
+                    <img id="image-to-crop" style="max-width: 100%;">
+                    <button id="crop-btn" style="width: 100%;" onclick="handleCrop()">CROP & USE</button>
+                </div>
+                <button onclick="add_page()">ADD PAGE</button>
+                <button onclick="save_book()">SAVE MY BOOK</button>
+                <button onclick="make_book()">MAKE MY BOOK</button>
+                <button onclick="restart_book()">RESTART</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .book_img-container {
+            position: absolute;
+            width: 50%;
+            left: 25%;
+            top: 23%;
+        }
+    </style>
+
+    <style>
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        @font-face {
+            font-family: 'cairo';
+            src: url(../../../fonts/Cairo.ttf);
+        }
+
+        :root {
+            --primary: white;
+            --secondary: #06884d;
+            --tertiary: 6, 171, 96;
+            --font: #444;
+            --bg-light: #f7f7f7;
+            --bg-dark: #272727;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'cairo', Arial, sans-serif;
+            text-decoration: none;
+            list-style: none;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            line-height: 1.6;
+        }
+
+        .major-container {
+            width: 794px;
+            min-height: 1123px;
+            display: flex;
+            flex-direction: column;
+            transform-origin: top left;
+        }
+
+        .major-container .page {
+            width: 100%;
+            height: 1123px;
+        }
+
+        .page {
+            position: relative;
+        }
+
+        .page .cover {
+            width: 100%;
+            height: 100%
+        }
+
+        .page .back-cover {
+            width: 100%;
+            height: 100%
+        }
+
+        .page table {
+            border-collapse: collapse;
+            margin: 0 50px;
+            font-size: 15px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        th,
+        tr td:nth-child(1) {
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .red {
+            color: #c02221;
+        }
+
+        .gold {
+            color: gold;
+        }
+
+        .light-blue {
+            color: lightblue;
+        }
+
+        .green {
+            color: green;
+        }
+
+        .lavender {
+            color: #beb9d9;
+        }
+
+        .gray {
+            color: gray;
+        }
+
+        .yellow {
+            color: yellow;
+        }
+
+        .pink {
+            color: pink;
+        }
+
+        .black {
+            color: black;
+        }
+
+        .dark-blue {
+            color: darkblue;
+        }
+
+        .remove-btn {
+            position: absolute;
+            width: 50px;
+            font-size: 20px;
+            padding: 5px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #C70000;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .remove-btn:hover {
+            opacity: 0.8;
+        }
+
+        .remove-btn:active {
+            scale: 0.95;
+        }
+
+        .page h1 {
+            text-align: center;
+            background-color: var(--secondary);
+            color: white;
+            padding: 25px;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            border-bottom: 6px solid rgba(var(--tertiary), 0.5);
+        }
+
+        .page h4 {
+            position: absolute;
+            display: flex;
+            justify-content: space-between;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background-color: var(--secondary);
+            color: white;
+            padding: 10px 20px;
+            text-transform: uppercase;
+            border-top: 6px solid rgba(var(--tertiary), 0.5);
+            margin-top: 50px;
+        }
+
+        .page h4 span {
+            width: calc(100% / 3);
+        }
+
+        .page h4 span:nth-child(1) {
+            text-align: left;
+        }
+
+        .page h4 span:nth-child(2) {
+            text-align: center;
+        }
+
+        .page h4 span:nth-child(3) {
+            text-align: right;
+        }
+
+        .flex {
+            display: flex;
+            padding: 0 50px;
+            min-height: 850px;
+            max-height: 880px;
+            gap: 50px;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 50%;
+        }
+
+        .info,
+        .notes,
+        .mis-reading,
+        .steps {
+            height: 50%;
+        }
+
+        .column div .title {
+            display: flex;
+            align-items: center;
+            gap: 5%;
+        }
+
+        .column div .title div {
+            width: 86%;
+        }
+
+        .column div .title h2 {
+            text-transform: uppercase;
+        }
+
+        .column div .title hr {
+            width: 100%;
+            height: 3px;
+            background-color: var(--font);
+        }
+
+        .column div .title i {
+            background-color: var(--secondary);
+            color: white;
+            font-size: 24px;
+            padding: 2%;
+            width: 50px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .content h3 {
+            font-weight: bold;
+        }
+
+        .content ul {
+            display: grid;
+            gap: 12px;
+            border-left: 8px solid var(--secondary);
+            border-radius: 4px;
+            padding-left: 10px;
+        }
+
+        .content ul li {
+            list-style-position: inside;
+            font-size: 14px;
+        }
+
+        .info .content ul li {
+            /* font-size: 18px; */
+        }
+
+        .content ul li b {
+            text-transform: uppercase;
+        }
+    </style>
+
+    <style>
+        .control-panel {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .control {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 10px;
+        }
+
+        .control input {
+            padding: 10px;
+            border: 0.1vmax var(--secondary) solid;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .control button {
+            font-size: 16px;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background-color: rgba(var(--tertiary), 1);
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .control button:hover {
+            opacity: 0.8;
+        }
+
+        .control button:active {
+            scale: 0.95;
+        }
+
+        #crop-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .none {
+            display: none !important;
+        }
+    </style>
+
+    <script>
+        const majorPath = location.pathname.split('/')[3];
+
+        const majors = {
+            'medical-analysis': 'Medical Analysis',
+            'microbiology': 'Microbiology',
+            'biology': 'Biology'
+        };
+
+        const major = majors[majorPath];
+    </script>
+
+    <script>
+        const majorTitles = document.querySelectorAll('.major-title');
+        majorTitles.forEach(majorTitle => {
+            if (majorTitle.innerHTML === '') {
+                majorTitle.innerHTML = major;
+            }
+        })
+
+        const images = document.querySelectorAll('.base64');
+        function convert_base64() {
+            images.forEach(image => {
+                if (image.src.startsWith('data')) {
+                    return;
+                }
+
+                if (image === images[0] && image.src === '') {
+                    image.src = `/images/majors/covers/${majorPath}.png`;
+                }
+
+                const img = new Image();
+                img.src = image.src;
+
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    image.src = canvas.toDataURL();
+                };
+            });
+        }
+
+        window.addEventListener('load', convert_base64);
+    </script>
+
+    <script>
+        const majorContainer = document.querySelector('.major-container');
+
+        // add page
+        function add_page() {
+            const pages = document.querySelectorAll('.page');
+            const lastPage = pages[pages.length - 2];
+
+            const newPage = document.createElement("div");
+            newPage.innerHTML = `
+                <div class="page" contenteditable="true">
+                    <button onclick="remove_page(this.parentElement)" class="remove-btn">
+                        <i class="fa-solid fa-trash-can" contenteditable="false"></i>
+                    </button>
+
+                    <h1 contenteditable="false">${major}</h1>
+
+                    <div class="flex">
+                        <div class="column">
+                            <div class="info">
+                                <div class="title">
+                                    <i class="fa-solid fa-info"></i>
+                                    <div>
+                                        <h2>analysis info</h2>
+                                        <hr>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="content">
+                                    <ul>
+                                        <li><b>analysis name: </b> CBC</li>
+                                        <li><b>sample type: </b> Whole Blood</li>
+                                        <li><b>used tube: </b> EDTA (lavender)</li>
+                                        <li><b>device name: </b> haematology analysers</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="steps">
+                                <div class="title">
+                                    <i class="fa-regular fa-file-lines"></i>
+                                    <div>
+                                        <h2>analysis steps</h2>
+                                        <hr>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="content">
+                                    <ul>
+                                        <li>Collect whole blood sample in an EDTA (lavender) tube.</li>
+                                        <li>Gently invert the tube 5-10 times to mix the anticoagulant with the sample.</li>
+                                        <li>Load the sample into the haematology analyser.</li>
+                                        <li>The analyser aspirates and processes the sample for CBC parameters.</li>
+                                        <li>The device measures RBC, WBC, Platelets, Hemoglobin, Hematocrit, etc..</li>
+                                        <li>Results are displayed and printed for further evaluation.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="column">
+                            <div class="notes">
+                                <div class="title">
+                                    <i class="fa-solid fa-list-check"></i>
+                                    <div>
+                                        <h2>analysis notes</h2>
+                                        <hr>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="content">
+                                    <ul>
+                                        <li>Ensure the sample is properly mixed to prevent clotting.</li>
+                                        <li>Avoid hemolysis by using proper venipuncture technique.</li>
+                                        <li>If delayed testing, store the sample at 2-8°C but do not freeze.</li>
+                                        <li>Lipemic or hemolyzed samples may affect results.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="mis-reading">
+                                <div class="title">
+                                    <i class="fa-solid fa-xmark"></i>
+                                    <div>
+                                        <h2>analysis misreading</h2>
+                                        <hr>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="content">
+                                    <ul>
+                                        <li>Clotted samples may cause inaccurate WBC or platelet counts.</li>
+                                        <li>Hemolysis can falsely decrease RBC count & Hematocrit.</li>
+                                        <li>Excessive EDTA can cause shrunken RBCs, affecting MCV results.</li>
+                                        <li>Cold agglutinins may increase MCV and falsely lower RBC count.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 contenteditable="false"><span>bau - zarqa</span> <span class="number">${pages.length}</span> <span>field training</span></h4>
+                </div>
+            `;
+
+            lastPage.after(newPage);
+        }
+
+        // remove page
+        function remove_page(element) {
+            element.remove();
+
+            const numbers = document.querySelectorAll('.number');
+            numbers.forEach((number, index) => {
+                number.innerHTML = index + 4;
+            })
+        }
+
+        const observer = new MutationObserver(mutations => {
+            mutations.forEach(mutation => {
+                // function
+            });
+        });
+
+        observer.observe(document.body, { subtree: true, childList: true, characterData: true });
+
+        // scale
+        function scale() {
+            if (innerWidth < 794) {
+                majorContainer.style.transform = `scale(${innerWidth / 794})`;
+            }
+        }
+        window.addEventListener("load", scale);
+        document.addEventListener("DOMContentLoaded", scale);
+        window.addEventListener('resize', scale);
+
+        // save
+        function save_book() {
+            saveDataToIndexedDB(majorContainer.innerHTML);
+            alert('Saved!');
+        }
+
+        // restore
+        function restore_book() {
+            getDataFromIndexedDB();
+        }
+        window.addEventListener('load', restore_book);
+
+        // restart
+        function restart_book() {
+            removeDataFromIndexedDB();
+            location.reload();
+        }
+
+        // make
+        function make_book() {
+            const controlPanel = document.querySelector('.control-panel');
+            controlPanel.classList.add('none');
+            majorContainer.style.transform = 'scale(1)'
+
+            const removeBtns = document.querySelectorAll('.remove-btn');
+            removeBtns.forEach(btn => {
+                btn.classList.add('none');
+            })
+
+            fetch('/db/make-book', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    html: document.querySelector("html").outerHTML
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.pdfUrl) {
+                        open(data.pdfUrl);
+                    }
+
+                    controlPanel.classList.remove('none');
+                    removeBtns.forEach(btn => {
+                        btn.classList.remove('none');
+                    })
+                    scale();
+                })
+        }
+    </script>
+
+    <script>
+        // handle image
+        function handleImageInput(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const image = document.getElementById('image-to-crop');
+                image.src = "";
+                image.src = e.target.result;
+
+                document.getElementById('crop-container').classList.remove('none');
+
+                if (window.cropper) {
+                    window.cropper.destroy();
+                }
+
+                window.cropper = new Cropper(image, {
+                    aspectRatio: 1,
+                    viewMode: 1
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // crop image
+        function handleCrop() {
+            if (!cropper) return;
+
+            const croppedImage = cropper.getCroppedCanvas().toDataURL('image/png');
+            document.getElementById('book_img').setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', croppedImage);
+            document.getElementById('crop-container').classList.add('none');
+
+            cropper.destroy();
+            cropper = null;
+        }
+    </script>
+
+    <script>
+        // getting ready with indexedDB
+        const dbRequest = indexedDB.open(`${major}Database`, 1);
+
+        dbRequest.onupgradeneeded = function (event) {
+            const db = event.target.result;
+
+            if (!db.objectStoreNames.contains(major)) {
+                db.createObjectStore(major, { keyPath: "id" });
+            }
+        };
+
+        dbRequest.onsuccess = function (event) {
+            const db = event.target.result;
+        };
+
+        // save data to indexedDB
+        function saveDataToIndexedDB(data) {
+            const dbRequest = indexedDB.open(`${major}Database`, 1);
+
+            dbRequest.onsuccess = function (event) {
+                const db = event.target.result;
+                const transaction = db.transaction(major, "readwrite");
+                const store = transaction.objectStore(major);
+
+                const bookRecord = {
+                    id: "content",
+                    data
+                };
+
+                store.put(bookRecord);
+            };
+        }
+
+        // get data from indexedDB
+        function getDataFromIndexedDB() {
+            const dbRequest = indexedDB.open(`${major}Database`, 1);
+
+            dbRequest.onsuccess = function (event) {
+                const db = event.target.result;
+                const transaction = db.transaction(major, "readonly");
+                const store = transaction.objectStore(major);
+
+                const request = store.get("content");
+                request.onsuccess = function () {
+                    const book = request.result;
+                    if (book) {
+                        majorContainer.innerHTML = book.data;
+                    }
+                };
+            };
+        }
+
+        // remove data from indexedDB
+        function removeDataFromIndexedDB() {
+            const dbRequest = indexedDB.open(`${major}Database`, 1);
+
+            dbRequest.onsuccess = function (event) {
+                const db = event.target.result;
+                const transaction = db.transaction(major, "readwrite");
+                const store = transaction.objectStore(major);
+
+                const request = store.delete("content");
+            };
+        }
+    </script>
+
+</body>
+
+</html>

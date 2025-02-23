@@ -297,9 +297,9 @@
                 let ownCard = '';
                 if (user.uniId === book.uid) {
                     if (book.done) {
-                        ownCard = `<a onclick="alert('This deal is over!');"><i class="fa-solid fa-square-check"></i></a>`;
+                        ownCard = `<a onclick="alert('This deal is over!');"><i class="fa-solid fa-thumbs-up"></i></a>`;
                     } else {
-                        ownCard = `<a onclick="doneadeal('${user.uniId}', '${book.uid}', '${book.id}');"><i class="fa-solid fa-square-check"></i></a>`;
+                        ownCard = `<a onclick="doneadeal('${user.uniId}', '${book.uid}', '${book.id}');"><i class="fa-solid fa-thumbs-up"></i></a>`;
                     }
                 } else {
                     if (book.done) {

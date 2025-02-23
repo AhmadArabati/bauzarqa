@@ -441,7 +441,7 @@ router.post("/add-group", loggedIn, async (req, res) => {
         const existingGroupSnapshot = await groupsRef.where("link", "==", groupId).limit(1).get();
 
         if (!existingGroupSnapshot.empty) {
-            return throwError(req, res, `This group link already exists!`, '/services/whatsapp-groups/#error');
+            return throwError(req, res, `Group already exists!`, '/services/whatsapp-groups/#error');
         }
 
         const usersRef = db.collection("users");
@@ -481,7 +481,7 @@ router.post("/add-group", loggedIn, async (req, res) => {
             req.session.user.credits = newCredits;
         }
 
-        return throwError(req, res, `Group added successfully!`, '/services/whatsapp-groups/#error');
+        return throwError(req, res, `Group added successfully!`, '/services/whatsapp-groups/#error', true);
     } catch (error) {
         console.error("Error adding group:", error);
         return throwError(req, res, `Something went wrong!`, '/services/whatsapp-groups/#error');

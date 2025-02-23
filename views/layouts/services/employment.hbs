@@ -1,0 +1,142 @@
+<main>
+    <section class="section">
+        <h2>Advertisements</h2>
+        <br>
+        <hr>
+    </section>
+
+    <section class="section companies">
+        <div class="cards-container">
+            <div class="card">
+                <h1>مختبرات مدلاب</h1>
+                <h2>الزرقاء, الرصيفة</h2>
+                <h3>دورة تدريبية</h3>
+                <div class="options">
+                    <a href="https://chat.whatsapp.com/${company.link}">الالتحاق</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<style>
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2vmax;
+        justify-content: center;
+        padding: 2vmax;
+    }
+
+    .card {
+        border-radius: 1vmax;
+        box-shadow: 0 0 0.6vmax 0.3vmax var(--font);
+        transition: transform 0.3s ease-in-out;
+        text-align: -webkit-center;
+        padding: 1vmax;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .card img {
+        border-radius: 50%;
+        width: 100%;
+    }
+
+    .card h1,
+    .card h2,
+    .card h3 {
+        margin: 0.25vmax 0;
+    }
+
+    .card h1 {
+        font-size: 1.6vmax;
+    }
+
+    .card h2 {
+        font-size: 1vmax;
+        color: var(--font);
+        text-transform: none;
+
+    }
+
+    .card h3 {
+        font-size: 1vmax;
+        color: var(--font);
+        font-weight: 400;
+    }
+
+    .options {
+        display: flex;
+        gap: 2%;
+    }
+
+    .card a {
+        display: block;
+        width: 100%;
+        font-size: 1vmax;
+        background-color: var(--font);
+        color: white;
+        padding: 0.25vmax;
+        border-radius: 0.25vmax;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    @media (max-width: 1366px) {
+        .card h1 {
+            font-size: 1.6rem;
+        }
+
+        .card h2 {
+            font-size: 1rem;
+
+        }
+
+        .card h3,
+        .card a {
+            font-size: 1rem;
+        }
+    }
+
+    .card a:hover {
+        background-color: var(--secondary);
+    }
+</style>
+
+<script>
+    const user = {{{ json user }}};
+
+    async function fetchCompanies() {
+        const companiesCards = document.querySelector('.cards-container');
+
+        try {
+            const response = await fetch("/db/get-companies");
+            const companies = await response.json();
+
+            companiesCards.innerHTML = '';
+
+            companies.forEach((company) => {
+                const card = document.createElement("div");
+                card.className = "card";
+                card.innerHTML = `
+                <img src="${company.image}">
+                <h3>${company.name}</h3>
+                <div class="options">
+                    <a href="https://chat.whatsapp.com/${company.link}" target="_blank"><i class="fa-solid fa-link"></i></a>
+                    <a onclick="copy('https://chat.whatsapp.com/${company.link}')"><i class="fa-solid fa-copy"></i></a>
+                </div>`;
+
+                card.onclick = () => {
+                    console.log(company.id);
+                }
+                companiesCards.appendChild(card);
+            });
+        } catch (error) { }
+    }
+</script>
