@@ -169,6 +169,8 @@ router.post('/user/sign-in', loggedOut, async (req, res) => {
             credits: userData.credits,
         };
 
+        console.log(`${userData.uniId}: ${userData.name}`);
+
         res.redirect('/user/profile');
     } catch (error) {
         console.error('Error signing in user:', error);
